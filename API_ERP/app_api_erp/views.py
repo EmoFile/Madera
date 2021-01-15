@@ -38,9 +38,11 @@ class CreateClient(generic.View):
             print(f'no e_mail in JSON | IP : {request.META.get("REMOTE_ADDR")}')
             return HttpResponse(status=404)
         try:
+            print('POST to CreateClient')
             if isinstance(received['e_mail'], str) and isinstance(received['phone_number'], str) \
                     and isinstance(received['address'], str) and isinstance(received['firstname'], str) \
                     and isinstance(received['lastname'], str):
+                print('GOOD POST')
                 Client.objects.create(
                     lastname=received['lastname'],
                     firstname=received['firstname'],
@@ -49,6 +51,7 @@ class CreateClient(generic.View):
                     phone_number=received['phone_number'],
                 )
                 return HttpResponse(status=200)
+            print('BAD POST')
         except ValueError:
             e = sys.exc_info()[0]
             print(e)
@@ -57,16 +60,16 @@ class CreateClient(generic.View):
 
 class IsClientExist(generic.View):
     """
-        Only get can be called in this view
+        Only post can be called in this view
         """
-    http_method_names = ['get']
+    http_method_names = ['post']
 
     @method_decorator(never_cache)
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         """
         Only Request with id in his JSON will work, else it will do 404.
         :param request: Mandatory: the request with the POST where the id is mandatory. if id is not
@@ -74,11 +77,11 @@ class IsClientExist(generic.View):
         :return HttpResponse: 200 or 404
         """
         received = json.loads(request.body)
-        if not 'id' in received:
-            print(f'no id in JSON | IP : {request.META.get("REMOTE_ADDR")}')
+        if not 'e_mail' in received:
+            print(f'no e_mail in JSON | IP : {request.META.get("REMOTE_ADDR")}')
             return HttpResponse(status=404)
         try:
-            if isinstance(received['id'], int) and get_object_or_404(Client, id=received['id']):
+            if isinstance(received['e_mail'], int) and get_object_or_404(Client, e_mail=received['e_mail']):
                 return HttpResponse(status=200)
             else:
                 return HttpResponse(status=404)
@@ -90,16 +93,16 @@ class IsClientExist(generic.View):
 
 class GetClientById(generic.View):
     """
-        Only get can be called in this view
+        Only post can be called in this view
         """
-    http_method_names = ['get']
+    http_method_names = ['post']
 
     @method_decorator(never_cache)
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         """
         Only Request with id in his JSON will work, else it will do 404.
         :param request: Mandatory: the request with the POST where the id is mandatory. if id is not
