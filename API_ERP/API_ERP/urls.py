@@ -16,6 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from app_api_erp.views import CreateClient, IsClientExist, GetClientById
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+]
+
+urlpatterns += [
+    path('CreateClient/', CreateClient.as_view(), name='create_client'),
+    path('IsClientExist/', IsClientExist.as_view(), name='is_client_exist'),
+    path('GetClientById/', GetClientById.as_view(), name='get_client_by_id'),
 ]
