@@ -16,14 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from app_api_erp.views import CreateClient, IsClientExist, GetClientById
+from app_api_erp.views import CreateClient, IsClientExist, GetClientById, CreateInternalUser, GetInternalUserById
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
-
+# region Client
 urlpatterns += [
     path('CreateClient/', CreateClient.as_view(), name='create_client'),
     path('IsClientExist/', IsClientExist.as_view(), name='is_client_exist'),
     path('GetClientById/', GetClientById.as_view(), name='get_client_by_id'),
 ]
+# endregion
+# region InternalUser
+urlpatterns += [
+    path('CreateInternalUser/', CreateInternalUser.as_view(), name='create_internal_user'),
+    path('GetInternalUserById/', GetInternalUserById.as_view(), name='get_internal_user_by_id'),
+]
+# endregion
