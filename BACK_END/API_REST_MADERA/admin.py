@@ -1,3 +1,4 @@
 from django.contrib import admin
+from API_REST_MADERA.models import Devis
 
-# Register your models here.
+admin.site.register(Devis);
