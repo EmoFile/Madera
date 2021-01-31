@@ -1,20 +1,21 @@
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Devis, Plan
-from .serializers import DevisSerializer, PlanSerializer
+from .models import Devis, Plan, Ticket
+from .serializers import DevisSerializer, PlanSerializer, TicketSerializer
 
-# DEVIS
 
-# Vue Liste des devis en JSON
-class DevisViewSet(ModelViewSet):
-    queryset = Devis.objects.all()
-    serializer_class = DevisSerializer
+# TICKETS
 
-# Vue Détail du devis en JSON
-class DevisDetailViewSet(RetrieveUpdateDestroyAPIView):
-    queryset = Devis.objects.all()
-    serializer_class = DevisSerializer
+# Vue Liste des tickets en JSON
+class TicketsViewSet(ModelViewSet):
+    queryset = Ticket.objects.all()
+    serializer_class = TicketSerializer
+
+# Vue Détail du ticket en JSON
+class TicketDetailViewSet(RetrieveUpdateDestroyAPIView):
+    queryset = Ticket.objects.all()
+    serializer_class = TicketSerializer
 
 # PLANS
 
@@ -27,3 +28,15 @@ class PlansViewSet(ModelViewSet):
 class PlanDetailViewSet(RetrieveUpdateDestroyAPIView):
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
+
+# DEVIS
+
+# Vue Liste des devis en JSON
+class DevisViewSet(ModelViewSet):
+    queryset = Devis.objects.all()
+    serializer_class = DevisSerializer
+
+# Vue Détail du devis en JSON
+class DevisDetailViewSet(RetrieveUpdateDestroyAPIView):
+    queryset = Devis.objects.all()
+    serializer_class = DevisSerializer

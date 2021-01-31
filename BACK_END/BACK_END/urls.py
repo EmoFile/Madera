@@ -18,11 +18,12 @@ from django.urls import path, include
 from rest_framework import routers
 
 from API_REST_MADERA import views
-from API_REST_MADERA.views import DevisDetailViewSet, PlanDetailViewSet
+from API_REST_MADERA.views import DevisDetailViewSet, PlanDetailViewSet, TicketDetailViewSet
 
 router = routers.DefaultRouter()
-router.register(r'devis', views.DevisViewSet, 'devis')
+router.register(r'tickets', views.PlansViewSet, 'tickets')
 router.register(r'plans', views.PlansViewSet, 'plans')
+router.register(r'devis', views.DevisViewSet, 'devis')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +31,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest-framework'))
 ]
 urlpatterns += [
-    path('devis/<int:pk>', DevisDetailViewSet.as_view(), name="devis-detail"),
+    path('ticket/<int:pk>', TicketDetailViewSet.as_view(), name="ticket-detail"),
     path('plan/<int:pk>', PlanDetailViewSet.as_view(), name="plan-detail"),
+    path('devis/<int:pk>', DevisDetailViewSet.as_view(), name="devis-detail"),
 ]
