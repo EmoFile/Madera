@@ -27,4 +27,3 @@ class PlansViewSet(ModelViewSet):
 class PlanDetailViewSet(RetrieveUpdateDestroyAPIView):
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
-    
