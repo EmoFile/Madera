@@ -21,7 +21,8 @@ from API_REST_MADERA import views
 from API_REST_MADERA.views import DevisDetailViewSet, PlanDetailViewSet, TicketDetailViewSet
 
 router = routers.DefaultRouter()
-router.register(r'tickets', views.PlansViewSet, 'tickets')
+
+router.register(r'tickets', views.TicketsViewSet, 'tickets')
 router.register(r'plans', views.PlansViewSet, 'plans')
 router.register(r'devis', views.DevisViewSet, 'devis')
 
