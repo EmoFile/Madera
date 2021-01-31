@@ -1,11 +1,7 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 
-# Utilisateurs
-
-class UserIT(AbstractBaseUser) :
-    nom = models.CharField(max_length=50);
-    prenom = models.CharField(max_length=50);
+# Utilisateurs (DOIVENT HERITER DE COMPTE CLIENT QUI EST A VERIFIER SI IL EST STOCKER ICI OU DANS L'ERP)
 
 class UserIT(AbstractBaseUser) :
     nom = models.CharField(max_length=50);
@@ -73,17 +69,17 @@ class Gamme(models.Model) :
     def __str__(self):
         return self.nom
 
-class Module(models.Model) :
-    id_module = models.AutoField(primary_key=True);
-    nom = models.CharField(max_length=50);
-
-    def __str__(self):
-        return self.nom
-
 class Composant(models.Model) :
     id_composant = models.AutoField(primary_key=True);
     nom = models.CharField(max_length=50);
     prix = models.DecimalField(max_digits=10, decimal_places=2);
+
+    def __str__(self):
+        return self.nom
+
+class Module(models.Model) :
+    id_module = models.AutoField(primary_key=True);
+    nom = models.CharField(max_length=50);
 
     def __str__(self):
         return self.nom
