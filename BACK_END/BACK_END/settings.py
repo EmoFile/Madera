@@ -15,6 +15,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'API_REST_MADERA.CompteClient'
+
 # Application definition
 
 INSTALLED_APPS = [

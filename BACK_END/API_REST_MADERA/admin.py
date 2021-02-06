@@ -1,8 +1,9 @@
 from django.contrib import admin
 from API_REST_MADERA.models import Devis, UserIT, UserAdministration, UserBE, Commercial, Client, Ticket, Plan, Piece, \
-    Gamme, Composant, Module
+    Gamme, Composant, Module, CompteClient
 
 # Utilisateurs
+admin.site.register(CompteClient)
 admin.site.register(UserIT)
 admin.site.register(UserAdministration)
 admin.site.register(UserBE)

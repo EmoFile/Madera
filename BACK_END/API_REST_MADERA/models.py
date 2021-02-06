@@ -1,37 +1,77 @@
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 
-# Utilisateurs (DOIVENT HERITER DE COMPTE CLIENT QUI EST A VERIFIER SI IL EST STOCKER ICI OU DANS L'ERP)
+# Utilisateurs
 
-class UserIT(AbstractBaseUser) :
+class AccountManager(BaseUserManager):
+    def create_user(self, id_erp, password=None):
+        if not id_erp:
+            raise ValueError("L'utilisateur nécessite un ID ERP")
+
+        user = self.model()
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, id_erp, password=None):
+        user = self.create_user(id_erp, password=password)
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+class CompteClient(AbstractBaseUser) :
+    id_user = models.AutoField(primary_key=True)
+    id_erp = models.IntegerField(unique=True)
+    encrypted_password = models.CharField(max_length=60)
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+
+    objects = AccountManager()
+
+    USERNAME_FIELD = 'id_erp'
+
+    def __str__(self):
+        return self.id_erp
+
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
+
+    @property
+    def is_staff(self):
+        return self.is_admin
+
+class UserIT(CompteClient) :
     nom = models.CharField(max_length=50);
     prenom = models.CharField(max_length=50);
 
     def __str__(self):
         return self.prenom + " " + self.nom
 
-class UserAdministration(AbstractBaseUser) :
+class UserAdministration(CompteClient) :
     nom = models.CharField(max_length=50);
     prenom = models.CharField(max_length=50);
 
     def __str__(self):
         return self.prenom + " " + self.nom
 
-class UserBE(AbstractBaseUser) :
+class UserBE(CompteClient) :
     nom = models.CharField(max_length=50);
     prenom = models.CharField(max_length=50);
 
     def __str__(self):
         return self.prenom + " " + self.nom
 
-class Commercial(AbstractBaseUser) :
+class Commercial(CompteClient) :
     nom = models.CharField(max_length=50);
     prenom = models.CharField(max_length=50);
 
     def __str__(self):
         return self.prenom + " " + self.nom
 
-class Client(AbstractBaseUser) :
+class Client(CompteClient) :
     mail = models.CharField(max_length=50);
 
     def __str__(self):
