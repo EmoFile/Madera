@@ -12,7 +12,7 @@ router.register(r'tickets', views.TicketsViewSet, 'tickets')
 router.register(r'plans', views.PlansViewSet, 'plans')
 router.register(r'devis', views.DevisViewSet, 'devis')
 
-router.register(r'gammes', views.GammeViewSet, 'devis')
+router.register(r'gammes', views.GammeViewSet, 'gammes')
 router.register(r'composants', views.ComposantViewSet, 'composants')
 router.register(r'modules', views.ModuleViewSet, 'modules')
 router.register(r'pieces', views.PieceViewSet, 'pieces')
