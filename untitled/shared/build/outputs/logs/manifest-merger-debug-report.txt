@@ -1,0 +1,25 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml:2:1-98
+INJECTED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml:2:1-98
+INJECTED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml:2:1-98
+	package
+		ADDED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml:2:70-96
+		INJECTED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml
+		INJECTED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml:2:11-69
+uses-sdk
+INJECTED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml
+INJECTED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml
+INJECTED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml
+INJECTED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml
+		ADDED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml
+		INJECTED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml
+		ADDED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml
+		INJECTED from D:\CESIproject\MADERA\untitled\shared\src\androidMain\AndroidManifest.xml

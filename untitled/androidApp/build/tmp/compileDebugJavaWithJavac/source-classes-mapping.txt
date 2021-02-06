@@ -1,0 +1,2 @@
+me/nassim/androidApp/BuildConfig.java
+ me.nassim.androidApp.BuildConfig

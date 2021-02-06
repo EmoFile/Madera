@@ -2,6 +2,7 @@ package me.nassim.androidApp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import me.nassim.shared.Greeting
 import android.widget.TextView
 
@@ -16,5 +17,10 @@ class MainActivity : AppCompatActivity() {
 
         val tv: TextView = findViewById(R.id.text_view)
         tv.text = greet()
+
+    }
+
+    fun buttonListeProduits(view:View){
+
     }
 }
