@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\build\\intermediates\\res\\merged\\debug\\layout_activity_main.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\src\\main\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\build\\intermediates\\res\\merged\\debug\\layout_activity_creation_devis.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\src\\main\\res\\layout\\activity_creation_devis.xml"
+    },
+    {
+        "merged": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\build\\intermediates\\res\\merged\\debug\\layout_row_layout.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\src\\main\\res\\layout\\row_layout.xml"
+    }
+]

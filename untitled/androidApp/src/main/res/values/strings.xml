@@ -1,0 +1,5 @@
+<resources>
+    <string name="name">Name</string>
+    <string name="price">Price</string>
+    <string name="ajouter_une_pi_ce">Ajouter une pièce</string>
+</resources>
