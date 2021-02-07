@@ -3,10 +3,14 @@ var $modules = [{"id_gamme": 1, "id_module": 1, "nom": "Porte en bois"},
     {"id_gamme": 1, "id_module": 2, "nom": "Porte en PVC"},
     {"id_gamme": 2, "id_module": 3, "nom": "Mur 4x2"},
     {"id_gamme": 2, "id_module": 4, "nom": "Mur 5x2"}]
+var $clients = [{"id_erp": 1, "id_client": 1, "mail": "richard.sivera@free.fr"},
+    {"id_erp": 2, "id_client": 2, "mail": "marine.legast@free.fr"},]
+var $commercial = [{"id_erp": 1, "id_client": 1, "mail": "richard.sivera@free.fr"},
+    {"id_erp": 2, "id_client": 2, "mail": "marine.legast@free.fr"},]
 var devisJSON = {
     "nom": "",
     "commercial": 1,
-    "client": 1,
+    "client": null,
     "pieces": [],
 }
 
@@ -73,9 +77,21 @@ $(() => {
         $inputNomDevis.setAttribute('id', 'nom')
         $inputNomDevis.setAttribute('name', 'nom')
         $inputNomDevis.setAttribute('type', 'text')
+        let $selectClient = document.createElement('select')
+        $selectClient.setAttribute('id','select-client' )
+        for (let i = 0; i < $clients.length; i++) {
+            let $option = document.createElement('option')
+            $option.setAttribute('value', $clients[i].id_client)
+            $option.setAttribute('class', 'option-client')
+
+            $option.innerText = $clients[i].mail
+            $selectClient.append($option)
+        }
+
 
         $topDevisDiv.append($labelNomDevis)
         $topDevisDiv.append($inputNomDevis)
+        $topDevisDiv.append($selectClient)
         //endregion
 
         //region center-devis
@@ -110,6 +126,14 @@ $(() => {
         $pTextPriceDevis.innerText = "Prix :"
         $bottomDevisDiv.append($pTextPriceDevis)
         $bottomDevisDiv.append($pPriceDevis)
+
+        let $btnValiderDevis = document.createElement("button")
+        $btnValiderDevis.setAttribute('id', 'valider-devis')
+        $btnValiderDevis.setAttribute('type', 'button')
+        $btnValiderDevis.innerText = "Créer"
+        $bottomDevisDiv.append($btnValiderDevis)
+        console.log($bottomDevisDiv)
+
         //endregion
 
 
@@ -118,6 +142,15 @@ $(() => {
         $devisDiv.append($bottomDevisDiv)
         $devisForm.append($devisDiv)
         $mainDiv.append($devisForm)
+
+        $('#valider-devis').click(function () {
+            for (let i = 0; i < devisJSON["pieces"].length; i++) {
+                delete devisJSON["pieces"][i].id_front
+            }
+            var elem = document.getElementById('select-client')
+            devisJSON.client = elem.value
+            console.log(devisJSON)
+        })
 
         $('#ajouter-piece').click(function () {
             document.getElementById('center-right-devis-div').innerHTML = ""
@@ -226,5 +259,6 @@ $(() => {
                 console.log(devisJSON)
             });
         });
+
     });
 });
