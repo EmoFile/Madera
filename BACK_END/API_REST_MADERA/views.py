@@ -1,9 +1,11 @@
+from django.core import serializers
+from django.http import JsonResponse, HttpResponse
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece
+from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant
 from .serializers import DevisSerializer, PlanSerializer, TicketSerializer, GammeSerializer, ComposantSerializer, \
-    ModuleSerializer, PieceSerializer
+    ModuleSerializer, PieceSerializer, ModuleComposantSerializer
 
 
 # ADMINISTRATIF
@@ -59,27 +61,39 @@ class GammeDetailViewSet(RetrieveUpdateDestroyAPIView):
 
 # COMPOSANT
 
-# Vue Liste des gammes en JSON
+# Vue Liste des composants en JSON
 class ComposantViewSet(ModelViewSet):
     queryset = Composant.objects.all()
     serializer_class = ComposantSerializer
 
-# Vue Détail de la gamme en JSON
+# Vue Détail du composant en JSON
 class ComposantDetailViewSet(RetrieveUpdateDestroyAPIView):
     queryset = Composant.objects.all()
     serializer_class = ComposantSerializer
 
 # MODULE
 
-# Vue Liste des gammes en JSON
+# Vue Liste des modules en JSON
 class ModuleViewSet(ModelViewSet):
-    queryset = Module.objects.all()
+    queryset = Module.objects.all().order_by('gamme')
     serializer_class = ModuleSerializer
 
-# Vue Détail de la gamme en JSON
+# Vue Détail du module en JSON
 class ModuleDetailViewSet(RetrieveUpdateDestroyAPIView):
     queryset = Module.objects.all()
     serializer_class = ModuleSerializer
+
+# MODULE/COMPOSANT
+
+# Vue Liste des association Module/Composant en JSON
+class ModuleComposantViewSet(ModelViewSet):
+    queryset = ModuleComposant.objects.all()
+    serializer_class = ModuleComposantSerializer
+
+# Vue Détail de la gamme en JSON
+class ModuleComposantDetailViewSet(RetrieveUpdateDestroyAPIView):
+    queryset = ModuleComposant.objects.all()
+    serializer_class = ModuleComposantSerializer
 
 # PIECE
 
@@ -92,3 +106,32 @@ class PieceViewSet(ModelViewSet):
 class PieceDetailViewSet(RetrieveUpdateDestroyAPIView):
     queryset = Piece.objects.all()
     serializer_class = PieceSerializer
+
+# Vue des Gammes ainsi que des Modules correspondants aux gammes et leurs prix
+def products(request):
+    # Récupération des gammes
+    gammes = Gamme.objects.all()
+
+    # Création des listes
+    gamme_list = []
+    products_list = {'products': gamme_list}
+
+    # Récupération des modules par la gamme
+    for gamme in gammes:
+        module_list = []
+        modules = Module.objects.filter(gamme=gamme)
+        modules_json = serializers.serialize("json",modules, fields=('nom', 'gamme'))
+
+        # Récupération des composants à travers la table d'association ModuleComposant
+        for module in modules:
+            prix_module = 0
+            module_composants = ModuleComposant.objects.filter(module=module)
+            # Récupération du prix de chaque composant et calcul avec la quantité
+            for composant in module_composants:
+                quantite = ModuleComposant.objects.get(module=module, composant=composant.composant).quantite
+                prix_module += composant.composant.prix * quantite
+        module_list.append(modules_json)
+        module_gamme = {'nom': gamme.nom, 'modules': module_list}
+        gamme_list.append(module_gamme)
+
+    return JsonResponse(products_list)

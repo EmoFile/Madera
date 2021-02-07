@@ -97,16 +97,21 @@ class Composant(models.Model) :
 class Module(models.Model) :
     id_module = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=50)
-    gamme = models.OneToOneField(Gamme, on_delete=models.CASCADE, null=True, blank=True)
-    composants = models.ForeignKey(Composant, on_delete=models.CASCADE, null=True, blank=True)
+    gamme = models.ForeignKey(Gamme, on_delete=models.CASCADE, null=True, blank=True)
+    composants = models.ManyToManyField(Composant, through="ModuleComposant")
 
     def __str__(self):
         return self.nom
 
+class ModuleComposant(models.Model) :
+    quantite = models.IntegerField()
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True)
+    composant = models.ForeignKey(Composant, on_delete=models.CASCADE, null=True)
+
 class Piece(models.Model) :
     id_piece = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=50)
-    modules = models.ForeignKey(Module, on_delete=models.CASCADE, null=True, blank=True)
+    modules = models.ManyToManyField(Module)
 
     def __str__(self):
         return self.nom
@@ -118,8 +123,8 @@ class Ticket(models.Model) :
     titre = models.CharField(max_length=50)
     description = models.TextField()
     statut = models.CharField(max_length=25)
-    traitement = models.ForeignKey(UserIT, on_delete=models.CASCADE, null=True, blank=True)
-    #demande = models.ForeignKey(UserBE, UserAdministration, Commercial, models.CASCADE)
+    traitement = models.OneToOneField(UserIT, on_delete=models.CASCADE, null=True, blank=True)
+    demande = models.ForeignKey(CompteClient, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.titre + self.statut
@@ -140,7 +145,7 @@ class Devis(models.Model) :
     commercial = models.OneToOneField(Commercial, on_delete=models.CASCADE, null=True, blank=True)
     client = models.OneToOneField(Client, on_delete=models.CASCADE, null=True, blank=True)
     plan = models.OneToOneField(Plan, on_delete=models.CASCADE, null=True, blank=True)
-    pieces = models.ForeignKey(Piece,on_delete=models.CASCADE, null=True, blank=True)
+    pieces = models.ManyToManyField(Piece)
 
     def __str__(self):
         return self.nom_devis
