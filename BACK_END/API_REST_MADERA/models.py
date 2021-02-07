@@ -2,6 +2,8 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 
 # Utilisateurs
+from django.db.models import PROTECT
+
 
 class AccountManager(BaseUserManager):
     def create_user(self, id_erp, password=None):
@@ -19,7 +21,8 @@ class AccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class CompteClient(AbstractBaseUser) :
+
+class CompteClient(AbstractBaseUser):
     id_user = models.AutoField(primary_key=True)
     id_erp = models.IntegerField(unique=True)
     encrypted_password = models.CharField(max_length=60)
@@ -43,50 +46,57 @@ class CompteClient(AbstractBaseUser) :
     def is_staff(self):
         return self.is_admin
 
-class UserIT(CompteClient) :
+
+class UserIT(CompteClient):
     nom = models.CharField(max_length=50)
     prenom = models.CharField(max_length=50)
 
     def __str__(self):
         return self.prenom + " " + self.nom
 
-class UserAdministration(CompteClient) :
+
+class UserAdministration(CompteClient):
     nom = models.CharField(max_length=50)
     prenom = models.CharField(max_length=50)
 
     def __str__(self):
         return self.prenom + " " + self.nom
 
-class UserBE(CompteClient) :
+
+class UserBE(CompteClient):
     nom = models.CharField(max_length=50)
     prenom = models.CharField(max_length=50)
 
     def __str__(self):
         return self.prenom + " " + self.nom
 
-class Commercial(CompteClient) :
+
+class Commercial(CompteClient):
     nom = models.CharField(max_length=50)
     prenom = models.CharField(max_length=50)
 
     def __str__(self):
         return self.prenom + " " + self.nom
 
-class Client(CompteClient) :
+
+class Client(CompteClient):
     mail = models.CharField(max_length=50)
 
     def __str__(self):
         return self.prenom + " " + self.nom
 
+
 # Produits
 
-class Gamme(models.Model) :
+class Gamme(models.Model):
     id_gamme = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=50)
 
     def __str__(self):
         return self.nom
 
-class Composant(models.Model) :
+
+class Composant(models.Model):
     id_composant = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=50)
     prix = models.DecimalField(max_digits=10, decimal_places=2)
@@ -94,16 +104,24 @@ class Composant(models.Model) :
     def __str__(self):
         return self.nom
 
-class Module(models.Model) :
+
+class Module(models.Model):
     id_module = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=50)
-    gamme = models.OneToOneField(Gamme, on_delete=models.CASCADE, null=True, blank=True)
-    composants = models.ForeignKey(Composant, on_delete=models.CASCADE, null=True, blank=True)
+    gamme = models.ForeignKey(Gamme, on_delete=models.CASCADE, null=True, blank=True)
+    composants = models.ManyToManyField('Composant', through='ModuleComposant')
 
     def __str__(self):
         return self.nom
 
-class Piece(models.Model) :
+
+class ModuleComposant(models.Model):
+    module = models.ForeignKey(Module, on_delete=PROTECT)
+    composant = models.ForeignKey(Composant, on_delete=PROTECT)
+    quantity = models.PositiveIntegerField(default=1, blank=False, null=False)
+
+
+class Piece(models.Model):
     id_piece = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=50)
     modules = models.ForeignKey(Module, on_delete=models.CASCADE, null=True, blank=True)
@@ -111,20 +129,23 @@ class Piece(models.Model) :
     def __str__(self):
         return self.nom
 
+
 # Administratif
 
-class Ticket(models.Model) :
+class Ticket(models.Model):
     id_ticket = models.AutoField(primary_key=True)
     titre = models.CharField(max_length=50)
     description = models.TextField()
     statut = models.CharField(max_length=25)
     traitement = models.ForeignKey(UserIT, on_delete=models.CASCADE, null=True, blank=True)
-    #demande = models.ForeignKey(UserBE, UserAdministration, Commercial, models.CASCADE)
+
+    # demande = models.ForeignKey(UserBE, UserAdministration, Commercial, models.CASCADE)
 
     def __str__(self):
         return self.titre + self.statut
 
-class Plan(models.Model) :
+
+class Plan(models.Model):
     id_plan = models.AutoField(primary_key=True)
     auteur = models.OneToOneField(UserBE, on_delete=models.CASCADE, null=True, blank=True)
     nom = models.CharField(max_length=60)
@@ -133,14 +154,15 @@ class Plan(models.Model) :
     def __str__(self):
         return self.nom
 
-class Devis(models.Model) :
+
+class Devis(models.Model):
     id_devis = models.AutoField(primary_key=True)
     prix = models.DecimalField(max_digits=10, decimal_places=2)
     nom_devis = models.CharField(max_length=60)
     commercial = models.OneToOneField(Commercial, on_delete=models.CASCADE, null=True, blank=True)
     client = models.OneToOneField(Client, on_delete=models.CASCADE, null=True, blank=True)
     plan = models.OneToOneField(Plan, on_delete=models.CASCADE, null=True, blank=True)
-    pieces = models.ForeignKey(Piece,on_delete=models.CASCADE, null=True, blank=True)
+    pieces = models.ForeignKey(Piece, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.nom_devis

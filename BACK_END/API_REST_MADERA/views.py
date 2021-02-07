@@ -1,9 +1,9 @@
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece
+from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant
 from .serializers import DevisSerializer, PlanSerializer, TicketSerializer, GammeSerializer, ComposantSerializer, \
-    ModuleSerializer, PieceSerializer
+    ModuleSerializer, PieceSerializer, ModuleComposantSerializer
 
 
 # ADMINISTRATIF
@@ -92,3 +92,13 @@ class PieceViewSet(ModelViewSet):
 class PieceDetailViewSet(RetrieveUpdateDestroyAPIView):
     queryset = Piece.objects.all()
     serializer_class = PieceSerializer
+
+
+class ModuleComposantDetailViewSet(RetrieveUpdateDestroyAPIView):
+    queryset = ModuleComposant.objects.all()
+    serializer_class = ModuleComposantSerializer
+
+
+class ModuleComposantViewSet(ModelViewSet):
+    queryset = ModuleComposant.objects.all()
+    serializer_class = ModuleComposantSerializer

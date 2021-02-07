@@ -4,7 +4,7 @@ from rest_framework import routers
 
 from API_REST_MADERA import views
 from API_REST_MADERA.views import DevisDetailViewSet, PlanDetailViewSet, TicketDetailViewSet, GammeDetailViewSet, \
-    ComposantDetailViewSet, ModuleDetailViewSet, PieceDetailViewSet
+    ComposantDetailViewSet, ModuleDetailViewSet, PieceDetailViewSet, ModuleComposantDetailViewSet
 
 router = routers.DefaultRouter()
 
@@ -16,6 +16,7 @@ router.register(r'gammes', views.GammeViewSet, 'gammes')
 router.register(r'composants', views.ComposantViewSet, 'composants')
 router.register(r'modules', views.ModuleViewSet, 'modules')
 router.register(r'pieces', views.PieceViewSet, 'pieces')
+router.register(r'module_composant', views.ModuleComposantViewSet, 'module_composant')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,4 +32,6 @@ urlpatterns += [
     path('composant/<int:pk>', ComposantDetailViewSet.as_view(), name="composant-detail"),
     path('module/<int:pk>', ModuleDetailViewSet.as_view(), name="module-detail"),
     path('piece/<int:pk>', PieceDetailViewSet.as_view(), name="piece-detail"),
+
+    path('ComposantModule/<int:pk>', ModuleComposantDetailViewSet.as_view(), name="module_composant-detail")
 ]
