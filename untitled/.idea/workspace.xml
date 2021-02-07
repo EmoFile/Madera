@@ -9,20 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f7dadfc-adc5-4e4f-bdff-8fa665281fc7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../FRONT_MOBILE/androidApp/src/main/java/me/nassim/androidApp/DevisActivity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../FRONT_MOBILE/androidApp/src/main/res/layout/activity_devis.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../FRONT_MOBILE/androidApp/src/main/res/layout/activity_produits.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../FRONT_MOBILE/androidApp/src/main/res/values/strings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/androidApp/untitled.androidApp.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/shared/untitled.shared.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/untitled.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FRONT_MOBILE/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../FRONT_MOBILE/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FRONT_MOBILE/androidApp/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../FRONT_MOBILE/androidApp/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FRONT_MOBILE/androidApp/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../FRONT_MOBILE/androidApp/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FRONT_MOBILE/androidApp/src/main/java/me/nassim/androidApp/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../FRONT_MOBILE/androidApp/src/main/java/me/nassim/androidApp/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FRONT_MOBILE/androidApp/src/main/java/me/nassim/androidApp/ProduitsActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../FRONT_MOBILE/androidApp/src/main/java/me/nassim/androidApp/ProduitsActivity.kt" afterDir="false" />
-    </list>
+    <list default="true" id="8f7dadfc-adc5-4e4f-bdff-8fa665281fc7" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -104,7 +91,7 @@
       <option name="presentableId" value="Default" />
       <updated>1612019808195</updated>
       <workItem from="1612019812381" duration="16856000" />
-      <workItem from="1612614620247" duration="4477000" />
+      <workItem from="1612614620247" duration="5415000" />
     </task>
     <servers />
   </component>
