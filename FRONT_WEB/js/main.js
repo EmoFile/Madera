@@ -23,6 +23,7 @@ $(() => {
     $navDiv.append($ul)
 
     $('#creation-devis').click(function () {
+        document.getElementById('main-content').innerHTML =""
 
         let $mainDiv = document.getElementById('main-content')
         $mainDiv.setAttribute('class', 'container-fluid')
@@ -92,6 +93,7 @@ $(() => {
         $mainDiv.append($devisForm)
 
         $('#ajouter-piece').click(function () {
+            document.getElementById('center-right-devis-div').innerHTML =""
 
             let $pieceDiv = document.createElement('div')
             $pieceDiv.setAttribute('id', 'piece-div')
@@ -183,19 +185,31 @@ $(() => {
                 devisJSON["pieces"].push(piece)
 
                 let $recapPieceDiv = document.createElement('div')
-                $recapPieceDiv.setAttribute('id', `recap-piece-` + (devisJSON['pieces'].length + 1))
+                $recapPieceDiv.setAttribute('id', `recap-piece-` + (devisJSON['pieces'].length))
                 $recapPieceDiv.setAttribute('class', `row`)
                 let $recapPieceNom = document.createElement('p')
                 $recapPieceNom.setAttribute('class', `col`)
                 $recapPieceNom.innerText = document.getElementById('piece-name').value
                 let $deleteBtnRecapPiece = document.createElement('button')
-                $deleteBtnRecapPiece.setAttribute('class', `col btn btn-danger`)
+                $deleteBtnRecapPiece.setAttribute('class', `col btn btn-danger delete-piece`)
                 $deleteBtnRecapPiece.setAttribute('type', `button`)
+                $deleteBtnRecapPiece.setAttribute('id', 'delete-recap-piece-' + (devisJSON['pieces'].length))
                 $deleteBtnRecapPiece.innerText = 'X'
                 $recapPieceDiv.append($recapPieceNom)
                 $recapPieceDiv.append($deleteBtnRecapPiece)
                 $centerLeftDevisDiv.append($recapPieceDiv)
-
+                $('.delete-piece').click(function () {
+                    console.log(this)
+                    let elem = document.getElementById(this.id)
+                    let lio = elem.id.lastIndexOf('-');
+                    let idPiece = elem.id.slice(lio+1);
+                    console.log(lio)
+                    console.log(idPiece)
+                    console.log(elem)
+                    console.log(elem.parentElement.remove())
+                    delete devisJSON.pieces[idPiece];
+                });
+                document.getElementById('center-right-devis-div').innerHTML =""
                 console.log(devisJSON)
             });
         });
