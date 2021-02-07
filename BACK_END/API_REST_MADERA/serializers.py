@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece
+from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant
 
 
 # Serialisation des données en JSON
@@ -38,6 +38,17 @@ class ModuleSerializer(serializers.ModelSerializer) :
     class Meta:
         model = Module
         fields = ('id_module', 'nom', 'gamme', 'composants')
+
+class ProductSerializer(serializers.ModelSerializer) :
+    class Meta:
+        model = Module
+        fields = ('id_module', 'nom', 'gamme', 'composants', 'prix')
+
+
+class ModuleComposantSerializer(serializers.ModelSerializer) :
+    class Meta:
+        model = ModuleComposant
+        fields = ('quantite', 'module', 'composant')
 
 class PieceSerializer(serializers.ModelSerializer) :
     class Meta:
