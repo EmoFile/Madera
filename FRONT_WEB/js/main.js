@@ -9,13 +9,34 @@ var devisJSON = {
     "client": 1,
     "pieces": [],
 }
+
+const DELETEPIECE = {
+    bind() {
+        $(".delete-piece").attr('class', 'delete-piece btn btn-danger').click(function () {
+            console.log($(this))
+
+            let elem = document.getElementById($(this).attr('id'))
+            console.log('elem:' + elem)
+
+            let lio = elem.id.lastIndexOf('-');
+            let idPiece = elem.id.slice(lio + 1);
+
+            for (let i = 0; i < devisJSON.pieces.length; i++) {
+                if (devisJSON["pieces"][i].id_front === parseInt(idPiece)) {
+                    devisJSON.pieces.splice(i, 1);
+                    elem.parentElement.remove()
+                }
+            }
+            console.log(devisJSON)
+        });
+    }
+};
+
 $(() => {
-    console.log(devisJSON)
+
     let $navDiv = document.getElementById('navigation')
-    console.log($navDiv)
-    console.log("test")
     let $ul = document.createElement('ul')
-    console.log($ul)
+
 
     let $li = document.createElement('li')
     let $button = document.createElement('button')
@@ -29,7 +50,7 @@ $(() => {
     $navDiv.append($ul)
 
     $('#creation-devis').click(function () {
-        document.getElementById('main-content').innerHTML =""
+        document.getElementById('main-content').innerHTML = ""
 
         let $mainDiv = document.getElementById('main-content')
         $mainDiv.setAttribute('class', 'container-fluid')
@@ -99,7 +120,7 @@ $(() => {
         $mainDiv.append($devisForm)
 
         $('#ajouter-piece').click(function () {
-            document.getElementById('center-right-devis-div').innerHTML =""
+            document.getElementById('center-right-devis-div').innerHTML = ""
 
             let $pieceDiv = document.createElement('div')
             $pieceDiv.setAttribute('id', 'piece-div')
@@ -173,17 +194,15 @@ $(() => {
                 devisJSON["nom"] = document.getElementById('nom').value
                 devisJSON["commercial"] = 1
                 devisJSON["client"] = 1
-                console.log("valider-piece")
                 let piece = {
                     "nom": document.getElementById('piece-name').value,
-                    "id_front": devisJSON["pieces"].length+1,
+                    "id_front": devisJSON["pieces"].length + 1,
                     "modules": []
                 }
-                console.log(document.getElementById('center-piece-div').childElementCount)
                 for (i = 1; i < document.getElementById('center-piece-div').childElementCount + 1; i++) {
 
                     var elem = document.getElementById('select-module-' + i)
-                    let module = {"id_module":elem.value}
+                    let module = {"id_module": elem.value}
                     piece["modules"].push(module)
                 }
                 devisJSON["pieces"].push(piece)
@@ -202,25 +221,8 @@ $(() => {
                 $recapPieceDiv.append($recapPieceNom)
                 $recapPieceDiv.append($deleteBtnRecapPiece)
                 $centerLeftDevisDiv.append($recapPieceDiv)
-                $('.delete-piece').click(function () {
-                    console.log(this)
-
-                    let elem = document.getElementById(this.id)
-                    console.log('elem:' + elem)
-
-                    let lio = elem.id.lastIndexOf('-');
-                    let idPiece = elem.id.slice(lio+1);
-                    console.log(devisJSON.pieces[idPiece-1])
-                    for (let i = 0; i < devisJSON.pieces.length; i++) {
-                        if (devisJSON["pieces"][i].id_front === parseInt(idPiece)){
-                            console.log('index: ' + devisJSON["pieces"][i].id_front)
-                            devisJSON.pieces.splice(i,1);
-                            elem.parentElement.remove()
-                        }
-                    }
-                    console.log(devisJSON)
-                });
-                document.getElementById('center-right-devis-div').innerHTML =""
+                DELETEPIECE.bind()
+                document.getElementById('center-right-devis-div').innerHTML = ""
                 console.log(devisJSON)
             });
         });
