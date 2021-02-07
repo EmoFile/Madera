@@ -3,11 +3,7 @@ let $modules = [{"id_gamme": 1, "id_module": 1, "nom": "Porte en bois"},
     {"id_gamme": 1, "id_module": 2, "nom": "Porte en PVC"},
     {"id_gamme": 2, "id_module": 3, "nom": "Mur 4x2"},
     {"id_gamme": 2, "id_module": 4, "nom": "Mur 5x2"}]
-function optionChange(param){
-    console.log("test");
-    console.log(document.getElementById(param).value);
-    console.log(param);
-}
+
 $(() => {
     let $navDiv = document.getElementById('navigation')
     console.log($navDiv)
@@ -141,12 +137,11 @@ $(() => {
 
             $('#ajouter-module').click(function () {
                 let $selectModuleDiv = document.createElement('div')
-                $selectModuleDiv.setAttribute('onChange', 'select-module-' + (document.getElementById('center-piece-div').childElementCount + 1))
                 $selectModuleDiv.setAttribute('class',
                     'row')
                 let $selectModule = document.createElement('select')
                 $selectModule.setAttribute('id',
-                    'selec-module-' + (document.getElementById('center-piece-div').childElementCount + 1))
+                    'select-module-' + (document.getElementById('center-piece-div').childElementCount + 1))
 
                 for (let i = 0; i < $gammes.length; i++) {
                     let $optGroup = document.createElement('optgroup')
@@ -168,19 +163,25 @@ $(() => {
             });
 
             $('#valider-piece').click(function () {
-                console.log("valider-piece")
-                console.log(document.getElementById('center-piece-div').childElementCount)
-                for (i =0; i<document.getElementById('center-piece-div').childElementCount;i++){
-                    console.log(document.getElementById('select-module-'+i))
-                }
                 let devisJSON = {
                     "nom": document.getElementById('nom').value,
                     "commercial": 1,
                     "client": 1,
                     "pieces": [],
                 }
-                console.log(devisJSON['pieces'].length)
-                console.log(devisJSON['pieces'].length + 1)
+                console.log("valider-piece")
+                let piece = {
+                    "nom": document.getElementById('piece-name').value,
+                    "modules": []
+                }
+                console.log(document.getElementById('center-piece-div').childElementCount)
+                for (i = 1; i < document.getElementById('center-piece-div').childElementCount + 1; i++) {
+                    var elem = document.getElementById('select-module-' + i)
+                    let module = {"id_module":elem.value}
+                    piece["modules"].push(module)
+                }
+                devisJSON["pieces"].push(piece)
+
                 let $recapPieceDiv = document.createElement('div')
                 $recapPieceDiv.setAttribute('id', `recap-piece-` + (devisJSON['pieces'].length + 1))
                 $recapPieceDiv.setAttribute('class', `row`)
@@ -194,10 +195,7 @@ $(() => {
                 $recapPieceDiv.append($recapPieceNom)
                 $recapPieceDiv.append($deleteBtnRecapPiece)
                 $centerLeftDevisDiv.append($recapPieceDiv)
-                devisJSON["pieces"].push({
-                    "nom": document.getElementById('piece-name').value,
-                    "modules": []
-                })
+
                 console.log(devisJSON)
             });
         });
