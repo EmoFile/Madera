@@ -3,6 +3,11 @@ let $modules = [{"id_gamme": 1, "id_module": 1, "nom": "Porte en bois"},
     {"id_gamme": 1, "id_module": 2, "nom": "Porte en PVC"},
     {"id_gamme": 2, "id_module": 3, "nom": "Mur 4x2"},
     {"id_gamme": 2, "id_module": 4, "nom": "Mur 5x2"}]
+function optionChange(param){
+    console.log("test");
+    console.log(document.getElementById(param).value);
+    console.log(param);
+}
 $(() => {
     let $navDiv = document.getElementById('navigation')
     console.log($navDiv)
@@ -136,6 +141,7 @@ $(() => {
 
             $('#ajouter-module').click(function () {
                 let $selectModuleDiv = document.createElement('div')
+                $selectModuleDiv.setAttribute('onChange', 'select-module-' + (document.getElementById('center-piece-div').childElementCount + 1))
                 $selectModuleDiv.setAttribute('class',
                     'row')
                 let $selectModule = document.createElement('select')
@@ -149,6 +155,8 @@ $(() => {
                         if ($modules[j].id_gamme === $gammes[i].id_gamme) {
                             let $option = document.createElement('option')
                             $option.setAttribute('value', $modules[j].id_module)
+                            $option.setAttribute('class', 'option-module')
+
                             $option.innerText = $modules[j].nom
                             $optGroup.append($option)
                         }
@@ -158,7 +166,13 @@ $(() => {
                     $centerPieceDiv.append($selectModuleDiv)
                 }
             });
+
             $('#valider-piece').click(function () {
+                console.log("valider-piece")
+                console.log(document.getElementById('center-piece-div').childElementCount)
+                for (i =0; i<document.getElementById('center-piece-div').childElementCount;i++){
+                    console.log(document.getElementById('select-module-'+i))
+                }
                 let devisJSON = {
                     "nom": document.getElementById('nom').value,
                     "commercial": 1,
