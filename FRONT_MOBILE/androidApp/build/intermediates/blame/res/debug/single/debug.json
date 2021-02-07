@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "D:\\CESIproject\\MADERA\\FRONT_MOBILE\\androidApp\\build\\intermediates\\res\\merged\\debug\\layout_activity_produits.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\FRONT_MOBILE\\androidApp\\src\\main\\res\\layout\\activity_produits.xml"
+    },
+    {
+        "merged": "D:\\CESIproject\\MADERA\\FRONT_MOBILE\\androidApp\\build\\intermediates\\res\\merged\\debug\\layout_activity_devis.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\FRONT_MOBILE\\androidApp\\src\\main\\res\\layout\\activity_devis.xml"
+    },
+    {
+        "merged": "D:\\CESIproject\\MADERA\\FRONT_MOBILE\\androidApp\\build\\intermediates\\res\\merged\\debug\\layout_produits_layout.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\FRONT_MOBILE\\androidApp\\src\\main\\res\\layout\\produits_layout.xml"
+    },
+    {
+        "merged": "D:\\CESIproject\\MADERA\\FRONT_MOBILE\\androidApp\\build\\intermediates\\res\\merged\\debug\\layout_activity_main.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\FRONT_MOBILE\\androidApp\\src\\main\\res\\layout\\activity_main.xml"
+    }
+]

@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\CESIproject\\MADERA\\FRONT_MOBILE\\shared\\build\\intermediates\\res\\merged\\release\\interpolator-v21\\mtrl_fast_out_linear_in.xml",
+        "source": "C:\\Users\\Nassim\\.gradle\\caches\\transforms-2\\files-2.1\\a3d4007f4f7fe5a3a5f7dd5e8813f4bf\\material-1.2.1\\res\\interpolator-v21\\mtrl_fast_out_linear_in.xml"
+    },
+    {
+        "merged": "D:\\CESIproject\\MADERA\\FRONT_MOBILE\\shared\\build\\intermediates\\res\\merged\\release\\interpolator-v21\\mtrl_linear_out_slow_in.xml",
+        "source": "C:\\Users\\Nassim\\.gradle\\caches\\transforms-2\\files-2.1\\a3d4007f4f7fe5a3a5f7dd5e8813f4bf\\material-1.2.1\\res\\interpolator-v21\\mtrl_linear_out_slow_in.xml"
+    },
+    {
+        "merged": "D:\\CESIproject\\MADERA\\FRONT_MOBILE\\shared\\build\\intermediates\\res\\merged\\release\\interpolator-v21\\mtrl_fast_out_slow_in.xml",
+        "source": "C:\\Users\\Nassim\\.gradle\\caches\\transforms-2\\files-2.1\\a3d4007f4f7fe5a3a5f7dd5e8813f4bf\\material-1.2.1\\res\\interpolator-v21\\mtrl_fast_out_slow_in.xml"
+    }
+]
