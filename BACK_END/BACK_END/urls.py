@@ -4,7 +4,8 @@ from rest_framework import routers
 
 from API_REST_MADERA import views
 from API_REST_MADERA.views import DevisDetailViewSet, PlanDetailViewSet, TicketDetailViewSet, GammeDetailViewSet, \
-    ComposantDetailViewSet, ModuleDetailViewSet, PieceDetailViewSet, ModuleComposantDetailViewSet, products
+    ComposantDetailViewSet, ModuleDetailViewSet, PieceDetailViewSet, ModuleComposantDetailViewSet, products, \
+    ManualAPIPiece
 
 router = routers.DefaultRouter()
 
@@ -34,4 +35,8 @@ urlpatterns += [
     path('module/<int:pk>', ModuleDetailViewSet.as_view(), name="module-detail"),
     path('modulecomposant/<int:pk>', ModuleComposantDetailViewSet.as_view(), name="modulecomposant-detail"),
     path('piece/<int:pk>', PieceDetailViewSet.as_view(), name="piece-detail"),
+]
+
+urlpatterns += [
+    path('richard-devis/', ManualAPIPiece.as_view(), name="piece-manual-api"),
 ]
