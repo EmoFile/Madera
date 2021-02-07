@@ -1,10 +1,16 @@
-let $gammes = [{"id_gamme": 1, "nom": "Portes"}, {"id_gamme": 2, "nom": "Murs"}]
-let $modules = [{"id_gamme": 1, "id_module": 1, "nom": "Porte en bois"},
+var $gammes = [{"id_gamme": 1, "nom": "Portes"}, {"id_gamme": 2, "nom": "Murs"}]
+var $modules = [{"id_gamme": 1, "id_module": 1, "nom": "Porte en bois"},
     {"id_gamme": 1, "id_module": 2, "nom": "Porte en PVC"},
     {"id_gamme": 2, "id_module": 3, "nom": "Mur 4x2"},
     {"id_gamme": 2, "id_module": 4, "nom": "Mur 5x2"}]
-
+var devisJSON = {
+    "nom": "",
+    "commercial": 1,
+    "client": 1,
+    "pieces": [],
+}
 $(() => {
+    console.log(devisJSON)
     let $navDiv = document.getElementById('navigation')
     console.log($navDiv)
     console.log("test")
@@ -163,21 +169,19 @@ $(() => {
                     $centerPieceDiv.append($selectModuleDiv)
                 }
             });
-
             $('#valider-piece').click(function () {
-                let devisJSON = {
-                    "nom": document.getElementById('nom').value,
-                    "commercial": 1,
-                    "client": 1,
-                    "pieces": [],
-                }
+                devisJSON["nom"] = document.getElementById('nom').value
+                devisJSON["commercial"] = 1
+                devisJSON["client"] = 1
                 console.log("valider-piece")
                 let piece = {
                     "nom": document.getElementById('piece-name').value,
+                    "id_front": devisJSON["pieces"].length+1,
                     "modules": []
                 }
                 console.log(document.getElementById('center-piece-div').childElementCount)
                 for (i = 1; i < document.getElementById('center-piece-div').childElementCount + 1; i++) {
+
                     var elem = document.getElementById('select-module-' + i)
                     let module = {"id_module":elem.value}
                     piece["modules"].push(module)
@@ -200,14 +204,21 @@ $(() => {
                 $centerLeftDevisDiv.append($recapPieceDiv)
                 $('.delete-piece').click(function () {
                     console.log(this)
+
                     let elem = document.getElementById(this.id)
+                    console.log('elem:' + elem)
+
                     let lio = elem.id.lastIndexOf('-');
                     let idPiece = elem.id.slice(lio+1);
-                    console.log(lio)
-                    console.log(idPiece)
-                    console.log(elem)
-                    console.log(elem.parentElement.remove())
-                    delete devisJSON.pieces[idPiece];
+                    console.log(devisJSON.pieces[idPiece-1])
+                    for (let i = 0; i < devisJSON.pieces.length; i++) {
+                        if (devisJSON["pieces"][i].id_front === parseInt(idPiece)){
+                            console.log('index: ' + devisJSON["pieces"][i].id_front)
+                            devisJSON.pieces.splice(i,1);
+                            elem.parentElement.remove()
+                        }
+                    }
+                    console.log(devisJSON)
                 });
                 document.getElementById('center-right-devis-div').innerHTML =""
                 console.log(devisJSON)
