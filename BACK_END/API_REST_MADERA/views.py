@@ -7,14 +7,44 @@ from django.views import generic
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant
+from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant, Commercial, \
+    UserAdministration, UserIT, UserBE, Client
 from .serializers import DevisSerializer, PlanSerializer, TicketSerializer, GammeSerializer, ComposantSerializer, \
     ModuleSerializer, PieceSerializer, ModuleComposantSerializer
 
+# UTILISATEURS
+class ManualAPICreateUserInterne(generic.View):
+    """
+    Only post can be called in this view
+    """
+    http_method_names = ['post']
 
+    @method_decorator(never_cache)
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        # Récupérer les infos du front et les mettre dans les variables
+        '''
+        data = json.loads('data')
+        dept = data['dept']
+        if dept == "UserIT":
+            UserIT.objects.create_user(data['email'])
+        elif dept == "UserAdministration":
+            UserAdministration.objects.create_user(data['email'])
+        elif dept == "UserBE":
+            UserBE.objects.create_user(data['email'])
+        elif dept == "Commercial":
+            Commercial.objects.create_user(data['email'])
+        elif dept == "Client":
+            Client.objects.create_user(data['email'])
+        '''
 # ADMINISTRATIF
 # TICKETS
 
