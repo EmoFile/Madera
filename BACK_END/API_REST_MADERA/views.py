@@ -1,15 +1,12 @@
 import json
-
-from django.core import serializers
+import requests
 from django.http import JsonResponse, HttpResponse
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 
 
@@ -31,21 +28,30 @@ class ManualAPICreateUserInterne(generic.View):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        # Récupérer les infos du front et les mettre dans les variables
-        '''
-        data = json.loads('data')
-        dept = data['dept']
-        if dept == "UserIT":
-            UserIT.objects.create_user(data['email'])
-        elif dept == "UserAdministration":
-            UserAdministration.objects.create_user(data['email'])
-        elif dept == "UserBE":
-            UserBE.objects.create_user(data['email'])
-        elif dept == "Commercial":
-            Commercial.objects.create_user(data['email'])
-        elif dept == "Client":
-            Client.objects.create_user(data['email'])
-        '''
+        # Récupérer les infos du front et créer l'utilisateur correspondant au departement
+        data = json.loads(request.body)
+        user_interne = {"id": data["id"]}
+        response = requests.post("http://localhost:8001/GetInternalUserById/", json=user_interne)
+        data_response = json.loads(response.content)
+        if data_response['status'] != 200:
+            return HttpResponse(status=400)
+
+        department = data_response['internal_user']['department']
+
+        if department == "IT":
+            UserIT.objects.create_user(email=data_response['internal_user']['e_mail'], password=data['password'])
+        elif department == "Administrator":
+            user = UserAdministration.objects.create(email=data_response['internal_user']['e_mail'], password=data['password'])
+            user.save()
+        elif department == "BE":
+            user = UserBE.objects.create_user(email=data_response['internal_user']['e_mail'], password=data['password'])
+            user.save()
+        elif department == "Commercial":
+            user = Commercial.objects.create_user(email=data_response['internal_user']['e_mail'], password=data['password'])
+            user.save()
+
+        return HttpResponse(status=201)
+
 # ADMINISTRATIF
 # TICKETS
 
