@@ -30,7 +30,7 @@ class ManualAPICreateUserInterne(generic.View):
     def post(self, request, *args, **kwargs):
         # Récupérer les infos du front et créer l'utilisateur correspondant au departement
         data = json.loads(request.body)
-        user_interne = {"id": data["id"]}
+        user_interne = {"id": int(data["id"])}
         response = requests.post("http://localhost:8001/GetInternalUserById/", json=user_interne)
         data_response = json.loads(response.content)
         if data_response['status'] != 200:
