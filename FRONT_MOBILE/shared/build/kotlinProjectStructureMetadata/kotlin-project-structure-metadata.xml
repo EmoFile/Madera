@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<projectStructure>
+    <formatVersion>0.3</formatVersion>
+    <variants>
+        <variant>
+            <name>iosArm64-api</name>
+            <sourceSet>commonMain</sourceSet>
+            <sourceSet>iosMain</sourceSet>
+        </variant>
+        <variant>
+            <name>iosX64-api</name>
+            <sourceSet>commonMain</sourceSet>
+            <sourceSet>iosMain</sourceSet>
+        </variant>
+    </variants>
+    <sourceSets>
+        <sourceSet>
+            <name>commonMain</name>
+            <moduleDependency>org.jetbrains.kotlin:kotlin-stdlib-common</moduleDependency>
+            <binaryLayout>klib</binaryLayout>
+        </sourceSet>
+        <sourceSet>
+            <name>iosMain</name>
+            <dependsOn>commonMain</dependsOn>
+            <moduleDependency>org.jetbrains.kotlin:kotlin-stdlib-common</moduleDependency>
+            <binaryLayout>klib</binaryLayout>
+            <hostSpecific>true</hostSpecific>
+        </sourceSet>
+    </sourceSets>
+</projectStructure>
