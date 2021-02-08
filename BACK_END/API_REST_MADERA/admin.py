@@ -11,12 +11,12 @@ admin.site.register(Commercial)
 admin.site.register(Client)
 
 # Administratif
-admin.site.register(Ticket);
-admin.site.register(Plan);
-admin.site.register(Devis);
+admin.site.register(Ticket)
+admin.site.register(Plan)
+admin.site.register(Devis)
 
 # Produits
-admin.site.register(Piece);
-admin.site.register(Gamme);
-admin.site.register(Composant);
-admin.site.register(Module);
+admin.site.register(Piece)
+admin.site.register(Gamme)
+admin.site.register(Composant)
+admin.site.register(Module)

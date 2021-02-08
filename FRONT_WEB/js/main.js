@@ -8,9 +8,11 @@ var $clients = [{"id_erp": 1, "id_client": 1, "mail": "richard.sivera@free.fr"},
 var $commercial = [{"id_erp": 1, "id_client": 1, "mail": "richard.sivera@free.fr"},
     {"id_erp": 2, "id_client": 2, "mail": "marine.legast@free.fr"},]
 var devisJSON = {
-    "nom": "",
-    "commercial": 1,
+    "prix":0,
+    "nom_devis": "",
+    "commercial": null,
     "client": null,
+    "plan":null,
     "pieces": [],
 }
 
@@ -144,12 +146,23 @@ $(() => {
         $mainDiv.append($devisForm)
 
         $('#valider-devis').click(function () {
+            devisJSON["nom_devis"] = document.getElementById('nom').value
             for (let i = 0; i < devisJSON["pieces"].length; i++) {
                 delete devisJSON["pieces"][i].id_front
             }
             var elem = document.getElementById('select-client')
-            devisJSON.client = elem.value
+            //devisJSON.client = parseInt(elem.value)
             console.log(devisJSON)
+            $.ajax({
+                url: 'http://127.0.0.1:8000/richard-devis/',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(devisJSON)
+            }).done(function (msg, status, jqXHR){
+                console.log(msg)
+                console.log(status)
+                console.log(jqXHR)
+            })
         })
 
         $('#ajouter-piece').click(function () {
@@ -224,9 +237,6 @@ $(() => {
                 }
             });
             $('#valider-piece').click(function () {
-                devisJSON["nom"] = document.getElementById('nom').value
-                devisJSON["commercial"] = 1
-                devisJSON["client"] = 1
                 let piece = {
                     "nom": document.getElementById('piece-name').value,
                     "id_front": devisJSON["pieces"].length + 1,
