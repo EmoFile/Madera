@@ -363,7 +363,50 @@ $(() => {
     $('#creation-compte-interne').click(function () {
         document.getElementById('main-content').innerHTML = ""
         let $mainDiv = document.getElementById('main-content')
+        let $idTextAera = document.createElement('input')
+        $idTextAera.setAttribute('type', 'number')
+        $idTextAera.setAttribute('id', 'id-area')
+        $idTextAera.setAttribute('name', 'id-area')
+        let $labelIdTextAera = document.createElement('label')
+        $labelIdTextAera.setAttribute('for', 'id-area')
+        $labelIdTextAera.innerText = "ID ERP :"
+        let $passwordAera = document.createElement('input')
+        $passwordAera.setAttribute('type', 'password')
+        $passwordAera.setAttribute('id', 'password-area')
+        $passwordAera.setAttribute('name', 'password-area')
 
+        let $labelPasswordAera = document.createElement('label')
+        $labelPasswordAera.setAttribute('for', 'password-area')
+        $labelPasswordAera.innerText = "PASSWORD :"
+
+        let $btnCreateIU = document.createElement('button')
+        $btnCreateIU.setAttribute('type', 'button')
+        $btnCreateIU.setAttribute('id', 'create-internal-user')
+        $btnCreateIU.innerText = "CREER"
+
+
+        $mainDiv.append($labelIdTextAera)
+        $mainDiv.append($idTextAera)
+        $mainDiv.append($labelPasswordAera)
+        $mainDiv.append($passwordAera)
+        $mainDiv.append($btnCreateIU)
+
+        $('#create-internal-user').click(function () {
+            let $userInternalJSON = {
+                "id": document.getElementById('id-area').value,
+                "password": document.getElementById('password-area').value
+            }
+            $.ajax({
+                url: 'http://127.0.0.1:8000/create-internal-user/',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify($userInternalJSON)
+            }).done(function (msg, status, jqXHR) {
+                console.log(msg)
+                console.log(status)
+                console.log(jqXHR)
+            })
+        });
     });
     //endregion
 
