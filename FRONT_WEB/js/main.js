@@ -173,7 +173,7 @@ $(() => {
             var elem = document.getElementById('select-client')
             console.log(devisJSON)
             $.ajax({
-                url: 'http://127.0.0.1:8000/richard-devis/',
+                url: 'http://127.0.0.1:8000/create-devis/',
                 type: 'post',
                 contentType: 'application/json',
                 data: JSON.stringify(devisJSON)

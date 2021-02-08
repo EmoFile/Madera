@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet
 
@@ -161,7 +162,7 @@ def products(request):
     return JsonResponse(products_list)
 
 
-class ManualAPIPiece(generic.View):
+class ManualAPIDevis(generic.View):
     """
     Only post can be called in this view
     """
@@ -205,3 +206,34 @@ class ManualAPIPiece(generic.View):
             return HttpResponse('200')
         except:
             return HttpResponse('400')
+
+
+class DevisListView(ListView):
+    model = Devis
+
+    def get_context_data(self, *args, **kwargs):
+        return Devis.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        devis = self.get_context_data()
+        json_devis = []
+        for devi in devis:
+            json_devi = {"id_devis": devi.id_devis,
+                         "prix": devi.prix,
+                         "etat": devi.etat,
+                         "nom_devis": devi.nom_devis,
+                         "commercial": devi.commercial,
+                         "client": devi.client,
+                         "plan": devi.plan,
+                         "pieces": []}
+            pieces = devi.pieces.all()
+            for piece in pieces:
+                json_piece = {
+                    "id_piece": piece.id_piece,
+                    "nom": piece.nom,
+                    "prix": 0
+                }
+                json_devi["pieces"].append(json_piece)
+            json_devis.append(json_devi)
+
+        return JsonResponse(json_devis, safe=False)
