@@ -1,8 +1,3 @@
-/*var $gammes = [{"id_gamme": 1, "nom": "Portes"}, {"id_gamme": 2, "nom": "Murs"}]
-var $modules = [{"id_gamme": 1, "id_module": 1, "nom": "Porte en bois"},
-    {"id_gamme": 1, "id_module": 2, "nom": "Porte en PVC"},
-    {"id_gamme": 2, "id_module": 3, "nom": "Mur 4x2"},
-    {"id_gamme": 2, "id_module": 4, "nom": "Mur 5x2"}]*/
 var $products = null
 
 $.ajax({
