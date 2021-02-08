@@ -218,40 +218,46 @@ class DevisListView(ListView):
     def get_context_data(self, *args, **kwargs):
         return Devis.objects.all()
 
-    def get(self, request, *args, **kwargs):
+    @method_decorator(never_cache)
+    @method_decorator(csrf_exempt)
+    def get(self, *args, **kwargs):
         devis = self.get_context_data()
         json_devis = []
-        for devi in devis:
-            print(f'id_devis: {devi.id_devis}')
+        try:
+            for devi in devis:
+                print(f'id_devis: {devi.id_devis}')
 
-            json_devi = {"id_devis": devi.id_devis,
-                         "prix": devi.prix,
-                         "etat": devi.etat,
-                         "nom_devis": devi.nom_devis,
-                         "commercial": devi.commercial,
-                         "client": devi.client,
-                         "plan": devi.plan,
-                         "pieces": []}
-            pieces = devi.pieces.all()
-            for piece in pieces:
-                json_piece = {
-                    "id_piece": piece.id_piece,
-                    "nom": piece.nom,
-                    "prix": 0
-                }
-                json_devi["pieces"].append(json_piece)
-                print(f'id_piece: {piece.id_piece}')
-                print(f'piece.module.count: {piece.modules.count()}')
-                modules = piece.modules.all()
-                print(modules)
+                json_devi = {"id_devis": devi.id_devis,
+                             "prix": devi.prix,
+                             "etat": devi.etat,
+                             "nom_devis": devi.nom_devis,
+                             "commercial": devi.commercial,
+                             "client": devi.client,
+                             "plan": devi.plan,
+                             "pieces": []}
+                pieces = devi.pieces.all()
+                for piece in pieces:
+                    json_piece = {
+                        "id_piece": piece.id_piece,
+                        "nom": piece.nom,
+                        "prix": 0
+                    }
+                    json_devi["pieces"].append(json_piece)
+                    print(f'id_piece: {piece.id_piece}')
+                    print(f'piece.module.count: {piece.modules.count()}')
+                    modules = piece.modules.all()
+                    print(modules)
 
-                current_piece_prix = 0
-                for module in modules:
-                    module_composants = ModuleComposant.objects.filter(module=module)
-                    for module_composant in module_composants:
-                        quantite = ModuleComposant.objects.get(module=module,
-                                                               composant=module_composant.composant).quantite
-                        current_piece_prix += module_composant.composant.prix * quantite
-                json_piece["prix"] += current_piece_prix
-            json_devis.append(json_devi)
-        return JsonResponse(json_devis, safe=False)
+                    current_piece_prix = 0
+                    for module in modules:
+                        module_composants = ModuleComposant.objects.filter(module=module)
+                        for module_composant in module_composants:
+                            quantite = ModuleComposant.objects.get(module=module,
+                                                                   composant=module_composant.composant).quantite
+                            current_piece_prix += module_composant.composant.prix * quantite
+                    json_piece["prix"] += current_piece_prix
+                json_devis.append(json_devi)
+            json_response = {"devis": json_devis}
+            return JsonResponse(json_response, safe=False)
+        except Exception:
+            raise Exception

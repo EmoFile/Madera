@@ -1,4 +1,5 @@
 var $products = null
+var $devis = null
 
 $.ajax({
     url: 'http://127.0.0.1:8000/products/',
@@ -51,23 +52,71 @@ const DELETEPIECE = {
 };
 
 $(() => {
-
-
+    //region CONSTRUCTION-NAVBAR
     let $navDiv = document.getElementById('navigation')
-    let $ul = document.createElement('ul')
+    $navDiv.setAttribute('id', 'nav-bar')
 
-
-    let $li = document.createElement('li')
-    let $button = document.createElement('button')
-    $button.setAttribute('id',
+    let $buttonCreationDevis = document.createElement('button')
+    $buttonCreationDevis.setAttribute('id',
         `creation-devis`)
-    $ul.setAttribute('id', 'nav-bar')
-    $button.innerText = 'Creation devis'
+    $buttonCreationDevis.setAttribute('class',
+        `m-1`)
+    $buttonCreationDevis.innerText = 'Creation devis'
 
-    $li.append($button)
-    $ul.append($li)
-    $navDiv.append($ul)
+    let $buttonCreationCompte = document.createElement('button')
+    $buttonCreationCompte.setAttribute('id',
+        `creation-compte`)
+    $buttonCreationCompte.setAttribute('class',
+        `m-1`)
+    $buttonCreationCompte.innerText = 'Creation compte'
 
+
+    let $buttonCreationCompteInterne = document.createElement('button')
+    $buttonCreationCompteInterne.setAttribute('id',
+        `creation-compte-interne`)
+    $buttonCreationCompteInterne.setAttribute('class',
+        `m-1`)
+    $buttonCreationCompteInterne.innerText = 'Creation compte interne'
+
+    let $buttonVueBI = document.createElement('button')
+    $buttonVueBI.setAttribute('id',
+        `vue-bi`)
+    $buttonVueBI.setAttribute('class',
+        `m-1`)
+    $buttonVueBI.innerText = 'Vue BI'
+
+    let $buttonHome = document.createElement('button')
+    $buttonHome.setAttribute('id',
+        `home`)
+    $buttonHome.setAttribute('class',
+        `m-1`)
+    $buttonHome.innerText = 'Home'
+
+    let $buttonRendezVous = document.createElement('button')
+    $buttonRendezVous.setAttribute('id',
+        `rendez-vous`)
+    $buttonRendezVous.setAttribute('class',
+        `m-1`)
+    $buttonRendezVous.innerText = 'Demander un rendez-vous'
+
+
+    $navDiv.append($buttonHome)
+    $navDiv.append($buttonCreationDevis)
+    $navDiv.append($buttonCreationCompte)
+    $navDiv.append($buttonCreationCompteInterne)
+    $navDiv.append($buttonVueBI)
+    $navDiv.append($buttonRendezVous)
+    //endregion
+
+    //region HOME
+    $('#home').click(function () {
+        document.getElementById('main-content').innerHTML = ""
+        let $mainDiv = document.getElementById('main-content')
+
+    });
+    //endregion
+
+    //region CREATION-DEVIS
     $('#creation-devis').click(function () {
         document.getElementById('main-content').innerHTML = ""
 
@@ -300,4 +349,142 @@ $(() => {
             });
         });
     });
+    //endregion
+
+    //region CREATION-COMPTE
+    $('#creation-compte').click(function () {
+        document.getElementById('main-content').innerHTML = ""
+        let $mainDiv = document.getElementById('main-content')
+
+    });
+    //endregion
+
+    //region CREATION-COMPTE-INTERNE
+    $('#creation-compte-interne').click(function () {
+        document.getElementById('main-content').innerHTML = ""
+        let $mainDiv = document.getElementById('main-content')
+
+    });
+    //endregion
+
+    //region VUE-BI
+    $('#vue-bi').click(function () {
+        document.getElementById('main-content').innerHTML = ""
+        let $mainDiv = document.getElementById('main-content')
+        let $mainTopDiv = document.createElement('main-top-content')
+        let $mainBottomDiv = document.createElement('main-bottom-content')
+        $mainTopDiv.setAttribute('class', 'row')
+        $mainBottomDiv.setAttribute('class', 'row')
+
+
+        let $devisCreatedDiv = document.createElement('div')
+        $devisCreatedDiv.setAttribute('class', 'col card bg-light m-3')
+        $devisCreatedDiv.setAttribute('style', 'max-width: 400px;')
+
+        let $devisCreatedHeaderDiv = document.createElement('div')
+        $devisCreatedHeaderDiv.setAttribute('class', 'card-header')
+        $devisCreatedHeaderDiv.innerText = "Tickets créés"
+        let $devisCreatedBodyDiv = document.createElement('div')
+        $devisCreatedBodyDiv.setAttribute('class', 'card-body')
+        let $devisCreatedTitleDiv = document.createElement('div')
+        $devisCreatedTitleDiv.setAttribute('class', 'card-title h1')
+        $devisCreatedBodyDiv.append($devisCreatedTitleDiv)
+        $devisCreatedDiv.append($devisCreatedHeaderDiv)
+        $devisCreatedDiv.append($devisCreatedBodyDiv)
+        $mainTopDiv.append($devisCreatedDiv)
+
+        let $devisAcceptedDiv = document.createElement('div')
+        $devisAcceptedDiv.setAttribute('class', 'col card text-white bg-success m-3')
+        $devisAcceptedDiv.setAttribute('style', 'max-width: 400px;')
+        let $devisAcceptedHeaderDiv = document.createElement('div')
+        $devisAcceptedHeaderDiv.setAttribute('class', 'card-header')
+        $devisAcceptedHeaderDiv.innerText = "Tickets créés"
+        let $devisAcceptedBodyDiv = document.createElement('div')
+        $devisAcceptedBodyDiv.setAttribute('class', 'card-body')
+        let $devisAcceptedTitleDiv = document.createElement('div')
+        $devisAcceptedTitleDiv.setAttribute('class', 'card-title h1')
+        $devisAcceptedBodyDiv.append($devisAcceptedTitleDiv)
+        $devisAcceptedDiv.append($devisAcceptedHeaderDiv)
+        $devisAcceptedDiv.append($devisAcceptedBodyDiv)
+        $mainTopDiv.append($devisAcceptedDiv)
+
+        let $devisPendingDiv = document.createElement('div')
+        $devisPendingDiv.setAttribute('class', 'col card text-white bg-warning m-3')
+        $devisPendingDiv.setAttribute('style', 'max-width: 400px;')
+
+        let $devisPendingHeaderDiv = document.createElement('div')
+        $devisPendingHeaderDiv.setAttribute('class', 'card-header')
+        $devisPendingHeaderDiv.innerText = "Tickets en attente"
+        let $devisPendingBodyDiv = document.createElement('div')
+        $devisPendingBodyDiv.setAttribute('class', 'card-body')
+        let $devisPendingTitleDiv = document.createElement('div')
+        $devisPendingTitleDiv.setAttribute('class', 'card-title h1')
+        $devisPendingBodyDiv.append($devisPendingTitleDiv)
+        $devisPendingDiv.append($devisPendingHeaderDiv)
+        $devisPendingDiv.append($devisPendingBodyDiv)
+        $mainBottomDiv.append($devisPendingDiv)
+
+        let $devisCanceledDiv = document.createElement('div')
+        $devisCanceledDiv.setAttribute('class', 'col card text-white bg-danger m-3')
+        $devisCanceledDiv.setAttribute('style', 'max-width: 400px;')
+        let $devisCanceledHeaderDiv = document.createElement('div')
+        $devisCanceledHeaderDiv.setAttribute('class', 'card-header')
+        $devisCanceledHeaderDiv.innerText = "Tickets refusées"
+        let $devisCanceledBodyDiv = document.createElement('div')
+        $devisCanceledBodyDiv.setAttribute('class', 'card-body')
+        let $devisCanceledTitleDiv = document.createElement('div')
+        $devisCanceledTitleDiv.setAttribute('class', 'card-title h1')
+        $devisCanceledBodyDiv.append($devisCanceledTitleDiv)
+        $devisCanceledDiv.append($devisCanceledHeaderDiv)
+        $devisCanceledDiv.append($devisCanceledBodyDiv)
+        $mainBottomDiv.append($devisCanceledDiv)
+
+        $mainDiv.append($mainTopDiv)
+        $mainDiv.append($mainBottomDiv)
+
+        $.ajax({
+            url: 'http://127.0.0.1:8000/get-devis/',
+            type: 'get',
+            dataType: 'json',
+        }).done(function (data) {
+            $devis = data.devis
+            console.log($devis)
+            $pendingCPT = 0
+            $acceptedCPT = 0
+            $refusedCPT = 0
+            for (let i = 0; i < $devis.length; i++) {
+                switch ($devis[i].etat) {
+                    case 'En attente':
+                        $pendingCPT++
+                        break
+                    case 'Accepté':
+                        $acceptedCPT++
+                        break
+                    case 'Validé':
+                        $refusedCPT++
+                        break
+                }
+            }
+            $devisCreatedTitleDiv.innerText = $pendingCPT + $acceptedCPT + $refusedCPT
+            $devisAcceptedTitleDiv.innerText = $acceptedCPT
+            $devisPendingTitleDiv.innerText = $pendingCPT
+            $devisCanceledTitleDiv.innerText = $refusedCPT
+
+
+        }).fail(function (data) {
+            console.log('FAIL')
+            console.log(data)
+        })
+
+    });
+    //endregion
+
+    //region VUE-BI
+    $('#rendez-vous').click(function () {
+        document.getElementById('main-content').innerHTML = ""
+
+        let $mainDiv = document.getElementById('main-content')
+
+    });
+    //endregion
 });
