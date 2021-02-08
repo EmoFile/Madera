@@ -134,28 +134,30 @@ def products(request):
     # Récupération des gammes
     gammes = Gamme.objects.all()
 
-    # Création des listes
+    # Création de la liste des gammes
     gamme_list = []
-    products_list = {'products': gamme_list}
 
     # Récupération des modules par la gamme
     for gamme in gammes:
         module_list = []
         modules = Module.objects.filter(gamme=gamme)
-        modules_json = serializers.serialize("json", modules, fields=('nom', 'gamme'))
-
         # Récupération des composants à travers la table d'association ModuleComposant
         for module in modules:
-            prix_module = 0
+            current_module = {
+                'id': module.id_module,
+                'nom': module.nom,
+                'prix': 0
+            }
             module_composants = ModuleComposant.objects.filter(module=module)
             # Récupération du prix de chaque composant et calcul avec la quantité
-            for composant in module_composants:
-                quantite = ModuleComposant.objects.get(module=module, composant=composant.composant).quantite
-                prix_module += composant.composant.prix * quantite
-        module_list.append(modules_json)
+            for module_composant in module_composants:
+                quantite = ModuleComposant.objects.get(module=module, composant=module_composant.composant).quantite
+                current_module['prix'] += module_composant.composant.prix * quantite
+            module_list.append(current_module)
         module_gamme = {'nom': gamme.nom, 'modules': module_list}
         gamme_list.append(module_gamme)
 
+    products_list = {'products': gamme_list}
     return JsonResponse(products_list)
 
 
