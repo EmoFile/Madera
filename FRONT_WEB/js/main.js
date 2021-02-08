@@ -70,7 +70,6 @@ $(() => {
         `m-1`)
     $buttonCreationCompte.innerText = 'Creation compte'
 
-
     let $buttonCreationCompteInterne = document.createElement('button')
     $buttonCreationCompteInterne.setAttribute('id',
         `creation-compte-interne`)
@@ -99,7 +98,6 @@ $(() => {
         `m-1`)
     $buttonRendezVous.innerText = 'Demander un rendez-vous'
 
-
     $navDiv.append($buttonHome)
     $navDiv.append($buttonCreationDevis)
     $navDiv.append($buttonCreationCompte)
@@ -112,7 +110,6 @@ $(() => {
     $('#home').click(function () {
         document.getElementById('main-content').innerHTML = ""
         let $mainDiv = document.getElementById('main-content')
-
     });
     //endregion
 
@@ -151,7 +148,6 @@ $(() => {
             $option.innerText = $clients[i].mail
             $selectClient.append($option)
         }
-
 
         $topDevisDiv.append($labelNomDevis)
         $topDevisDiv.append($inputNomDevis)
@@ -202,10 +198,7 @@ $(() => {
         $btnValiderDevis.setAttribute('type', 'button')
         $btnValiderDevis.innerText = "Créer"
         $bottomDevisDiv.append($btnValiderDevis)
-
-
         //endregion
-
 
         $devisDiv.append($topDevisDiv)
         $devisDiv.append($centerDevisDiv)
@@ -355,7 +348,153 @@ $(() => {
     $('#creation-compte').click(function () {
         document.getElementById('main-content').innerHTML = ""
         let $mainDiv = document.getElementById('main-content')
+        let $createClientTopDiv = document.createElement('div')
+        $createClientTopDiv.setAttribute('id', 'createClientTopDiv')
+        let $createClientBottomDiv = document.createElement('div')
+        $createClientBottomDiv.setAttribute('id', 'createClientBottomDiv')
 
+        let $isExistClientCheckbox = document.createElement('input')
+        $isExistClientCheckbox.setAttribute('id', 'isExistClientCheckbox')
+        $isExistClientCheckbox.setAttribute('type', 'checkbox')
+        $isExistClientCheckbox.setAttribute('name', 'isExistClientCheckbox')
+        let $labelIsExistClientCheckbox = document.createElement('label')
+        $labelIsExistClientCheckbox.setAttribute('for', 'isExistClientCheckbox')
+        $labelIsExistClientCheckbox.innerText = "Je suis déjà client Madera"
+
+        let $createClientButton = document.createElement('button')
+        $createClientButton.setAttribute('id', 'createClientButton')
+        $createClientButton.setAttribute('type', 'button')
+        $createClientButton.innerText = "Créer compte"
+
+        let $lnDiv = document.createElement('div')
+        let $fnDiv = document.createElement('div')
+        let $adrDiv = document.createElement('div')
+        let $emDiv = document.createElement('div')
+        let $pnDiv = document.createElement('div')
+        let $pwDiv = document.createElement('div')
+        let $cbDiv = document.createElement('div')
+
+        let $eMailArea = document.createElement('input')
+        $eMailArea.setAttribute('id', 'eMailArea')
+        $eMailArea.setAttribute('type', 'mail')
+        $eMailArea.setAttribute('name', 'eMailArea')
+        $eMailArea.setAttribute('maxlength', 50)
+        let $labelEMailArea = document.createElement('label')
+        $labelEMailArea.setAttribute('for', 'eMailArea')
+        $labelEMailArea.innerText = "Adresse mail"
+
+        let $passwordArea = document.createElement('input')
+        $passwordArea.setAttribute('id', 'passwordArea')
+        $passwordArea.setAttribute('type', 'password')
+        $passwordArea.setAttribute('name', 'passwordArea')
+        let $labelPasswordArea = document.createElement('label')
+        $labelPasswordArea.setAttribute('for', 'passwordArea')
+        $labelPasswordArea.innerText = "Password"
+
+        let $lastnameArea = document.createElement('input')
+        $lastnameArea.setAttribute('id', 'lastnameArea')
+        $lastnameArea.setAttribute('type', 'text')
+        $lastnameArea.setAttribute('name', 'lastnameArea')
+        $lastnameArea.setAttribute('maxlength', 25)
+        let $labelLastnameArea = document.createElement('label')
+        $labelLastnameArea.setAttribute('for', 'lastnameArea')
+        $labelLastnameArea.innerText = "Nom"
+
+        let $firstnameArea = document.createElement('input')
+        $firstnameArea.setAttribute('id', 'firstnameArea')
+        $firstnameArea.setAttribute('type', 'text')
+        $firstnameArea.setAttribute('name', 'firstnameArea')
+        $firstnameArea.setAttribute('maxlength', 25)
+        let $labelFirstnameArea = document.createElement('label')
+        $labelFirstnameArea.setAttribute('for', 'firstnameArea')
+        $labelFirstnameArea.innerText = "Prenom"
+
+        let $addressArea = document.createElement('textarea')
+        $addressArea.setAttribute('id', 'addressArea')
+        $addressArea.setAttribute('type', 'textarea')
+        $addressArea.setAttribute('name', 'addressArea')
+        $addressArea.setAttribute('maxlength', 250)
+        let $labelAddressArea = document.createElement('label')
+        $labelAddressArea.setAttribute('for', 'addressArea')
+        $labelAddressArea.innerText = "Adresse"
+
+        let $phoneNumberArea = document.createElement('input')
+        $phoneNumberArea.setAttribute('id', 'phoneNumberArea')
+        $phoneNumberArea.setAttribute('type', 'tel')
+        $phoneNumberArea.setAttribute('name', 'phoneNumberArea')
+        $phoneNumberArea.setAttribute('maxlength', 10)
+        let $labelNumberArea = document.createElement('label')
+        $labelNumberArea.setAttribute('for', 'phoneNumberArea')
+        $labelNumberArea.innerText = "Téléphone"
+
+        $emDiv.append($labelEMailArea)
+        $emDiv.append($eMailArea)
+        $pwDiv.append($labelPasswordArea)
+        $pwDiv.append($passwordArea)
+        $cbDiv.append($isExistClientCheckbox)
+        $cbDiv.append($labelIsExistClientCheckbox)
+
+        $createClientTopDiv.append($emDiv)
+        $createClientTopDiv.append($pwDiv)
+        $createClientTopDiv.append($cbDiv)
+
+        $lnDiv.append($labelLastnameArea)
+        $lnDiv.append($lastnameArea)
+        $fnDiv.append($labelFirstnameArea)
+        $fnDiv.append($firstnameArea)
+        $adrDiv.append($labelAddressArea)
+        $adrDiv.append($addressArea)
+        $pnDiv.append($labelNumberArea)
+        $pnDiv.append($phoneNumberArea)
+
+        $createClientBottomDiv.append($lnDiv)
+        $createClientBottomDiv.append($fnDiv)
+        $createClientBottomDiv.append($adrDiv)
+        $createClientBottomDiv.append($pnDiv)
+
+        $mainDiv.append($createClientTopDiv)
+        $mainDiv.append($createClientBottomDiv)
+        $mainDiv.append($createClientButton)
+
+        $('#isExistClientCheckbox').click(function () {
+            let checkbox = document.getElementById('isExistClientCheckbox')
+            console.log(checkbox.checked)
+            if (checkbox.checked) {
+                $('#createClientBottomDiv').hide()
+            } else {
+                $('#createClientBottomDiv').show()
+            }
+        });
+
+        $('#createClientButton').click(function () {
+            data_json = {}
+            let checkbox = document.getElementById('isExistClientCheckbox')
+            let mail = document.getElementById('eMailArea')
+            let password = document.getElementById('passwordArea')
+            let lastname = document.getElementById('lastnameArea')
+            let firstname = document.getElementById('firstnameArea')
+            let address = document.getElementById('addressArea')
+            let phonenumber = document.getElementById('phoneNumberArea')
+
+            if (checkbox.checked) {
+                data_json = {
+                    "isClientExist": checkbox.checked,
+                    "email": mail.value,
+                    "password": password.value,
+                }
+            } else {
+                data_json = {
+                    "isClientExist": checkbox.checked,
+                    "email": mail.value,
+                    "password": password.value,
+                    "lastname": lastname.value,
+                    "firstname": firstname.value,
+                    "address": address.value,
+                    "phonenumber": phonenumber.value
+                }
+            }
+            console.log(data_json)
+        });
     });
     //endregion
 
@@ -383,7 +522,6 @@ $(() => {
         $btnCreateIU.setAttribute('type', 'button')
         $btnCreateIU.setAttribute('id', 'create-internal-user')
         $btnCreateIU.innerText = "CREER"
-
 
         $mainDiv.append($labelIdTextAera)
         $mainDiv.append($idTextAera)
@@ -512,22 +650,25 @@ $(() => {
             $devisAcceptedTitleDiv.innerText = $acceptedCPT
             $devisPendingTitleDiv.innerText = $pendingCPT
             $devisCanceledTitleDiv.innerText = $refusedCPT
-
-
         }).fail(function (data) {
             console.log('FAIL')
             console.log(data)
         })
-
     });
     //endregion
 
     //region VUE-BI
     $('#rendez-vous').click(function () {
         document.getElementById('main-content').innerHTML = ""
-
         let $mainDiv = document.getElementById('main-content')
-
+        let $dateInput = document.createElement('input')
+        $dateInput.setAttribute('type', 'date')
+        $today = new Date(Date.now())
+        console.log($today)
+        console.log($today.toLocaleDateString())
+        console.log($today.toLocaleString())
+        console.log($today.getFullYear() + '-' + $today.getMonth() + '-' + $today.getDay())
+        $mainDiv.append($dateInput)
     });
     //endregion
 });
