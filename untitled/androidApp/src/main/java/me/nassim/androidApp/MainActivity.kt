@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.ListView
 import me.nassim.shared.Greeting
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONArray
 import java.net.HttpURLConnection
 import java.net.URL
@@ -65,9 +66,10 @@ class MainActivity : AppCompatActivity() {
             )
             )
         }
-
-        val adapter = ListAdapte(this,list)
-        this.findViewById<ListView>(R.id.presidents_list).adapter = adapter
+        println(list)
+        val moduleRecyclerView = this.findViewById<RecyclerView>(R.id.module_recyclerview)
+        val adapter = ModuleAdapter(this,list)
+        moduleRecyclerView.adapter = adapter
     }
 
     fun changeToCreation(view: View) {
