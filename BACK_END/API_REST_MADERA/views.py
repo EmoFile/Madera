@@ -10,7 +10,7 @@ from django.views.generic import ListView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant
+from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant, PieceModule
 from .serializers import DevisSerializer, PlanSerializer, TicketSerializer, GammeSerializer, ComposantSerializer, \
     ModuleSerializer, PieceSerializer, ModuleComposantSerializer
 
@@ -190,11 +190,15 @@ class ManualAPIDevis(generic.View):
             cpt = 0
             devis = None
             for piece in pieces:
+                print(piece["modules"])
                 created_piece = Piece.objects.create(nom=piece["nom"])
                 created_piece.save()
                 for module in piece["modules"]:
-                    created_piece.modules.add(Module.objects.get(id_module=module["id_module"]))
+                    current_module = Module.objects.get(id_module=module["id_module"])
+                    PieceModule(piece=created_piece, module=current_module).save()
+                    created_piece.save()
                 created_piece.save()
+                print(created_piece.modules.all())
                 if cpt == 0:
                     devis = Devis.objects.create(nom_devis=nom, prix=prix, client=client, commercial=commercial)
                     devis.save()
@@ -204,8 +208,8 @@ class ManualAPIDevis(generic.View):
                     devis.pieces.add(created_piece)
                     devis.save()
             return HttpResponse('200')
-        except:
-            return HttpResponse('400')
+        except Exception:
+            raise Exception
 
 
 class DevisListView(ListView):
@@ -218,6 +222,8 @@ class DevisListView(ListView):
         devis = self.get_context_data()
         json_devis = []
         for devi in devis:
+            print(f'id_devis: {devi.id_devis}')
+
             json_devi = {"id_devis": devi.id_devis,
                          "prix": devi.prix,
                          "etat": devi.etat,
@@ -234,6 +240,18 @@ class DevisListView(ListView):
                     "prix": 0
                 }
                 json_devi["pieces"].append(json_piece)
-            json_devis.append(json_devi)
+                print(f'id_piece: {piece.id_piece}')
+                print(f'piece.module.count: {piece.modules.count()}')
+                modules = piece.modules.all()
+                print(modules)
 
+                current_piece_prix = 0
+                for module in modules:
+                    module_composants = ModuleComposant.objects.filter(module=module)
+                    for module_composant in module_composants:
+                        quantite = ModuleComposant.objects.get(module=module,
+                                                               composant=module_composant.composant).quantite
+                        current_piece_prix += module_composant.composant.prix * quantite
+                json_piece["prix"] += current_piece_prix
+            json_devis.append(json_devi)
         return JsonResponse(json_devis, safe=False)
