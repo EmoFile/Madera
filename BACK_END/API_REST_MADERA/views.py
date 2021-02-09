@@ -4,6 +4,7 @@ from datetime import date
 import requests
 from django.core.files import storage
 from django.core.files.storage import default_storage
+from django.core.mail import send_mail
 from django.http import JsonResponse, HttpResponse
 from django.utils.decorators import method_decorator
 from django.views import generic
@@ -26,6 +27,7 @@ from .serializers import DevisSerializer, PlanSerializer, TicketSerializer, Gamm
 class CompteDetailViewSet(RetrieveAPIView):
     queryset = Compte.objects.all()
     serializer_class = CompteSerializer
+
 
 # Création d'utilisateurs internes
 class ManualAPICreateUserInterne(generic.View):
@@ -64,7 +66,7 @@ class ManualAPICreateUserInterne(generic.View):
                                               prenom=data_response['internal_user']['firstname'],
                                               nom=data_response['internal_user']['lastname'],
                                               id_erp=int(data["id"]),
-                                                departement=department
+                                              departement=department
                                               )
         elif department == "BE":
             UserBE.objects.create(email=data_response['internal_user']['e_mail'],
@@ -80,7 +82,7 @@ class ManualAPICreateUserInterne(generic.View):
                                       prenom=data_response['internal_user']['firstname'],
                                       nom=data_response['internal_user']['lastname'],
                                       id_erp=int(data["id"]),
-                                  departement=department
+                                      departement=department
                                       )
         return HttpResponse(status=201)
 
@@ -322,6 +324,7 @@ class ManualAPIDevis(generic.View):
                 else:
                     devis.pieces.add(created_piece)
                     devis.save()
+            Workflow(1)
             return HttpResponse('200')
         except Exception:
             raise Exception
@@ -404,6 +407,7 @@ class ManualAPIAccepterDevis(generic.View):
             devis.etat = 'Accepté'
             devis.save()
             print(devis.etat)
+            Workflow(2)
             return HttpResponse(200)
         except Exception:
             raise Exception
@@ -469,4 +473,22 @@ class ManualAPIAddPlan(generic.View):
 
         date_time_string = today.strftime("%Y%m%d")
         file_name = default_storage.save('./Media/' + date_time_string + '_' + file.name, file)
+        Workflow(3)
         return HttpResponse(200)
+
+
+def Workflow(workflow_state):
+    if workflow_state == 1:
+        '''send_mail(
+            'Votre devis à été créé',
+            'Retrouver sur votre espace client le devis créé afin de le valider',
+            'richard.sivera@free.fr',
+            ['richard.sivera@free.fr'],
+            fail_silently=False,
+        )'''
+        print('Dire client que sont devis a été établie')
+    elif workflow_state == 2:
+        print('Dire Service BE que sont devis a été accepté')
+    elif workflow_state == 3:
+        print('Dire Service Production que les plans ont été ajouté au devis')
+        print('Dire Service Achats que les plans ont été ajouté au devis')
