@@ -6,16 +6,21 @@ from django.views import generic
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant, Commercial, \
-    UserAdministration, UserIT, UserBE, Client, PieceModule
+    UserAdministration, UserIT, UserBE, Client, PieceModule, Compte
 from .serializers import DevisSerializer, PlanSerializer, TicketSerializer, GammeSerializer, ComposantSerializer, \
-    ModuleSerializer, PieceSerializer, ModuleComposantSerializer
+    ModuleSerializer, PieceSerializer, ModuleComposantSerializer, CompteSerializer
 
 
 # UTILISATEURS
+
+# Vue Détail du compte (DEPARTEMENT) en JSON pour filtrage
+class CompteDetailViewSet(RetrieveAPIView):
+    queryset = Compte.objects.all()
+    serializer_class = CompteSerializer
 
 # Création d'utilisateurs internes
 class ManualAPICreateUserInterne(generic.View):

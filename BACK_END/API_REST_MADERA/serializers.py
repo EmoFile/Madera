@@ -1,9 +1,15 @@
 from rest_framework import serializers
 
-from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant
+from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant, Compte
 
 
 # Serialisation des données en JSON
+
+# Compte
+class CompteSerializer(serializers.ModelSerializer) :
+    class Meta:
+        model = Compte
+        fields = ('departement',)
 
 # Administratif
 
