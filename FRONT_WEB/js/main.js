@@ -138,6 +138,80 @@ const REFUSERDEVIS = {
     }
 };
 
+const SENDFILE = {
+    bind() {
+        $(".button-send-file-devis").attr('class', 'm-1 btn btn-success button-send-file-devis').click(function () {
+            //console.log($(this))
+
+            let elem = document.getElementById($(this).attr('id'))
+            //console.log(elem)
+
+            let lio = elem.id.lastIndexOf('-');
+            let idDevis = elem.id.slice(lio + 1);
+            let btnSendFile = ('button-send-file-devis-' + idDevis)
+            let btnSelectFile = ('input-select-file-devis-' + idDevis)
+            let file = document.getElementById(btnSelectFile)
+            console.log(file.files[0].name)
+            console.log(file.files[0])
+            file.files[0].name = idDevis + '-' + file.files[0].name
+            console.log(file.files[0].name)
+            let formData = new FormData();
+            formData.append('file.pdf', file.files[0]);
+            console.log(formData)
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function (e) {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    result = xhr.responseText;
+                    console.log(result);
+                }
+            }
+            xhr.open('POST', "http://127.0.0.1:8000/add-plan/", true);
+            xhr.setRequestHeader("Authorization", "");
+            xhr.send(formData);
+            /*            $.ajax({
+                            url: 'http://127.0.0.1:8000/add-plan/',
+                            type: 'post',
+                            data: FormData,
+                            dataType: 'application/pdf',
+                        }).done(function (msg, status, jqXHR) {
+                            /!*    console.log(msg)
+                                console.log(status)
+                                console.log(jqXHR)*!/
+
+                        })*/
+        });
+    }
+};
+
+const AJOUTPLAN = {
+    bind() {
+        $(".button-add-plan-devis").attr('class', 'button-add-plan-devis btn btn-info').click(function () {
+            //console.log($(this))
+
+            let elem = document.getElementById($(this).attr('id'))
+            //console.log(elem)
+
+            let lio = elem.id.lastIndexOf('-');
+            let idDevis = elem.id.slice(lio + 1);
+            let $buttonsDiv = document.getElementById('button-div-devis-' + idDevis)
+            let $inputSelectFile = document.createElement('input')
+            $inputSelectFile.setAttribute('id', ('input-select-file-devis-' + idDevis))
+            $inputSelectFile.setAttribute('class', ('m-1 input-select-file-devis' + idDevis))
+            $inputSelectFile.setAttribute('type', 'file')
+            $inputSelectFile.setAttribute('accept', '.pdf')
+
+            let $btnSendFile = document.createElement('button')
+            $btnSendFile.setAttribute('id', ('button-send-file-devis-' + idDevis))
+            $btnSendFile.setAttribute('class', 'm-1 btn btn-success button-send-file-devis')
+            $btnSendFile.setAttribute('type', 'button')
+            $btnSendFile.innerText = 'Valider'
+
+            $buttonsDiv.append($inputSelectFile)
+            $buttonsDiv.append($btnSendFile)
+            SENDFILE.bind()
+        });
+    }
+};
 $(() => {
     //region CONSTRUCTION-NAVBAR
     let $navDiv = document.getElementById('navigation')
@@ -296,6 +370,7 @@ $(() => {
             }
             ACCEPTERDEVIS.bind()
             REFUSERDEVIS.bind()
+            AJOUTPLAN.bind()
         })
     });
     //endregion
