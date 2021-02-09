@@ -14,7 +14,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['10.0.2.2']
 
-AUTH_USER_MODEL = 'API_REST_MADERA.CompteClient'
+AUTH_USER_MODEL = 'API_REST_MADERA.Compte'
 
 # Application definition
 
@@ -116,3 +116,11 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAiL_HOST = 'smtp.free.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = 'richard.sivera@free.fr'
+EMAIL_HOST_USER = 'richard.sivera@free.fr'
+'''EMAIL_HOST_PASSWORD = '******'''

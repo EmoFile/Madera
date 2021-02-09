@@ -1,92 +1,116 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+from django.utils import timezone
+
 
 # Utilisateurs
 
+# Gestionnaire Création Utilisateurs
 class AccountManager(BaseUserManager):
-    def create_user(self, id_erp, password=None):
-        if not id_erp:
-            raise ValueError("L'utilisateur nécessite un ID ERP")
+    use_in_migrations = True
 
-        user = self.model()
+    def _create_user(self, email, password, **extra_fields):
+        values = [email]
+        field_value_map = dict(zip(self.model.REQUIRED_FIELDS, values))
+        for field_name, value in field_value_map.items():
+            if not value:
+                raise ValueError('The {} value must be set'.format(field_name))
+
+        email = self.normalize_email(email)
+        user = self.model(
+            email=email,
+            **extra_fields
+        )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, id_erp, password=None):
-        user = self.create_user(id_erp, password=password)
-        user.is_admin = True
-        user.save(using=self._db)
-        return user
+    def create_user(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(email, password, **extra_fields)
 
-class CompteClient(AbstractBaseUser) :
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser doit avoir la variable is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser doit avoir la variable is_superuser=True.')
+        return self._create_user(email, password, **extra_fields)
+
+# Classe mère Compte dont dépends tous les autres comptes
+class Compte(AbstractBaseUser, PermissionsMixin) :
+    email = models.EmailField(unique=True)
+    departement = models.CharField(max_length=50)
     id_user = models.AutoField(primary_key=True)
-    id_erp = models.IntegerField(unique=True)
-    encrypted_password = models.CharField(max_length=60)
+    id_erp = models.IntegerField(unique=True, null=True)
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=timezone.now)
 
     objects = AccountManager()
 
-    USERNAME_FIELD = 'id_erp'
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['password']
 
-    def __str__(self):
-        return self.id_erp
 
-    def has_perm(self, perm, obj=None):
-        return True
-
-    def has_module_perms(self, app_label):
-        return True
-
-    @property
-    def is_staff(self):
-        return self.is_admin
-
-class UserIT(CompteClient) :
+# Compte pour User IT
+class UserIT(Compte) :
     nom = models.CharField(max_length=50)
     prenom = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.prenom + " " + self.nom
+        return self.email
 
-class UserAdministration(CompteClient) :
+
+# Compte pour User Admnistration
+class UserAdministration(Compte) :
     nom = models.CharField(max_length=50)
     prenom = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.prenom + " " + self.nom
+        return self.email
 
-class UserBE(CompteClient) :
+
+# Compte pour User Bureau d'Etudes
+class UserBE(Compte) :
     nom = models.CharField(max_length=50)
     prenom = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.prenom + " " + self.nom
+        return self.email
 
-class Commercial(CompteClient) :
+
+# Compte pour Commercial
+class Commercial(Compte) :
     nom = models.CharField(max_length=50)
     prenom = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.prenom + " " + self.nom
+        return self.email
 
-class Client(CompteClient) :
-    mail = models.CharField(max_length=50)
+
+# Compte pour Client
+class Client(Compte) :
 
     def __str__(self):
-        return self.prenom + " " + self.nom
+        return self.email
 
 # Produits
 
-class Gamme(models.Model) :
+class Gamme(models.Model):
     id_gamme = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=50)
 
     def __str__(self):
         return self.nom
 
-class Composant(models.Model) :
+
+class Composant(models.Model):
     id_composant = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=50)
     prix = models.DecimalField(max_digits=10, decimal_places=2)
@@ -94,7 +118,8 @@ class Composant(models.Model) :
     def __str__(self):
         return self.nom
 
-class Module(models.Model) :
+
+class Module(models.Model):
     id_module = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=50)
     gamme = models.ForeignKey(Gamme, on_delete=models.CASCADE, null=True, blank=True)
@@ -103,33 +128,42 @@ class Module(models.Model) :
     def __str__(self):
         return self.nom
 
-class ModuleComposant(models.Model) :
+
+class ModuleComposant(models.Model):
     quantite = models.IntegerField()
     module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True)
     composant = models.ForeignKey(Composant, on_delete=models.CASCADE, null=True)
 
-class Piece(models.Model) :
+
+class Piece(models.Model):
     id_piece = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=50)
-    modules = models.ManyToManyField(Module)
+    modules = models.ManyToManyField('Module', through='PieceModule')
 
     def __str__(self):
         return self.nom
 
+
+class PieceModule(models.Model):
+    piece = models.ForeignKey(Piece, on_delete=models.CASCADE, null=True)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, null=True)
+
+
 # Administratif
 
-class Ticket(models.Model) :
+class Ticket(models.Model):
     id_ticket = models.AutoField(primary_key=True)
     titre = models.CharField(max_length=50)
     description = models.TextField()
     statut = models.CharField(max_length=25)
     traitement = models.OneToOneField(UserIT, on_delete=models.CASCADE, null=True, blank=True)
-    demande = models.ForeignKey(CompteClient, on_delete=models.CASCADE, null=True, blank=True)
+    demande = models.ForeignKey(Compte, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.titre + self.statut
 
-class Plan(models.Model) :
+
+class Plan(models.Model):
     id_plan = models.AutoField(primary_key=True)
     auteur = models.OneToOneField(UserBE, on_delete=models.CASCADE, null=True, blank=True)
     nom = models.CharField(max_length=60)
@@ -138,7 +172,19 @@ class Plan(models.Model) :
     def __str__(self):
         return self.nom
 
-class Devis(models.Model) :
+
+class Devis(models.Model):
+    ENATTENTE = 'En attente'
+    ACCEPTE = 'Accepté'
+    REFUSE = 'Refusé'
+    STATE_CHOICES = [
+        (ENATTENTE, 'Enattente'),
+        (ACCEPTE, 'Accepte'),
+        (REFUSE, 'Refuse'),
+    ]
+    etat = models.CharField(max_length=20,
+                            choices=STATE_CHOICES,
+                            default=ENATTENTE)
     id_devis = models.AutoField(primary_key=True)
     prix = models.DecimalField(max_digits=10, decimal_places=2)
     nom_devis = models.CharField(max_length=60)

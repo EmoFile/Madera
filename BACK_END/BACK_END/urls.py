@@ -5,7 +5,8 @@ from rest_framework import routers
 from API_REST_MADERA import views
 from API_REST_MADERA.views import DevisDetailViewSet, PlanDetailViewSet, TicketDetailViewSet, GammeDetailViewSet, \
     ComposantDetailViewSet, ModuleDetailViewSet, PieceDetailViewSet, ModuleComposantDetailViewSet, products, \
-    ManualAPIPiece
+    ManualAPIDevis, DevisListView, ManualAPICreateUserInterne, ManualAPIAccepterDevis, ManualAPIRefuserDevis, \
+    ManualAPICreateUser, CompteDetailViewSet, ManualAPIAddPlan, ManualAPIAddPlanTODevis
 
 router = routers.DefaultRouter()
 
@@ -23,6 +24,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest-framework')),
+    path('create-internal-user/', ManualAPICreateUserInterne.as_view(), name="create-user-internal-api"),
+    path('create-user/', ManualAPICreateUser.as_view(), name="create-user-api"),
+    path('compte/<int:pk>', CompteDetailViewSet.as_view(), name="compte-detail"),
     path('products/', products, name='products')
 ]
 urlpatterns += [
@@ -38,5 +42,10 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('richard-devis/', ManualAPIPiece.as_view(), name="piece-manual-api"),
+    path('create-devis/', ManualAPIDevis.as_view(), name="create-devis-manual-api"),
+    path('get-devis/', DevisListView.as_view(), name="list-devis-manual-api"),
+    path('accept-devis/', ManualAPIAccepterDevis.as_view(), name="accept-devis-manual-api"),
+    path('cancel-devis/', ManualAPIRefuserDevis.as_view(), name="cancel-devis-manual-api"),
+    path('send-plan/', ManualAPIAddPlan.as_view(), name="send-plan-manual-api"),
+    path('add-plan-to-devis/', ManualAPIAddPlanTODevis.as_view(), name="add-plan-to-devis-manual-api"),
 ]

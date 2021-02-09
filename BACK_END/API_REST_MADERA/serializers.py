@@ -1,9 +1,15 @@
 from rest_framework import serializers
 
-from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant
+from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant, Compte
 
 
 # Serialisation des données en JSON
+
+# Compte
+class CompteSerializer(serializers.ModelSerializer) :
+    class Meta:
+        model = Compte
+        fields = ('departement',)
 
 # Administratif
 
@@ -22,30 +28,9 @@ class PlanSerializer(serializers.ModelSerializer):
 class DevisSerializer(serializers.ModelSerializer):
     class Meta:
         model = Devis
-        fields = ('id_devis', 'prix', 'nom_devis', 'commercial', 'client', 'plan', 'pieces')
+        fields = ('id_devis', 'prix', 'etat', 'nom_devis', 'commercial', 'client', 'plan', 'pieces')
 
-    def create(self, request):
-        if request.method == 'POST':
-            json_data = request.body
-            prix = json_data["prix"]
-            client = json_data["client"]
-            commercial = json_data["commercial"]
-            nom = json_data["commercial"]
-            pieces = json_data["pieces"]
-            cpt = 0
-            devis = None
-            for piece in pieces:
-                piece = Piece.objects.create(nom=piece.nom)
-                piece.save()
-                for module in piece["modules"]:
-                    piece.modules += Module.objects.get(id_module=module.id_module)
-                piece.save()
-                if cpt == 0:
-                    devis = Devis.objects.create(nom_devis=nom, prix=prix, client=client, commercial=commercial,
-                                                 pieces=piece)
-                    cpt += 1
-                else:
-                    devis.pieces += piece
+
 # Produits
 
 class GammeSerializer(serializers.ModelSerializer):
@@ -82,5 +67,3 @@ class PieceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Piece
         fields = ('id_piece', 'nom', 'modules')
-
-
