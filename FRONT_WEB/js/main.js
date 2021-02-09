@@ -122,17 +122,6 @@ const REFUSERDEVIS = {
                 $(idBtnAccept).hide()
                 $(idBtnCancel).hide()
                 $(idBtnAddPlan).hide()
-
-                // rajout du bouton modifier
-
-                let $buttonModifyDevis = document.createElement('button')
-                $buttonModifyDevis.setAttribute('id', ('button-mofify-devis-' + idDevis))
-                $buttonModifyDevis.setAttribute('class', 'button-modify-devis btn btn-primary m-1')
-                $buttonModifyDevis.setAttribute('type', 'button')
-                $buttonModifyDevis.innerText = "Modifier"
-                let $buttonDevisDiv = document.getElementById('button-div-devis-' + idDevis)
-                $buttonDevisDiv.append($buttonModifyDevis)
-
             })
         });
     }
@@ -343,15 +332,14 @@ $(() => {
                     $buttonDevisDiv.append($buttonAcceptDevis)
                     $buttonDevisDiv.append($buttonCancelDevis)
                 }
-                if ($devis[i].etat === 'Refusé') {
 
-                    let $buttonModifyDevis = document.createElement('button')
-                    $buttonModifyDevis.setAttribute('id', ('button-mofify-devis-' + $devis[i].id_devis))
-                    $buttonModifyDevis.setAttribute('class', 'button-modify-devis btn btn-primary m-1')
-                    $buttonModifyDevis.setAttribute('type', 'button')
-                    $buttonModifyDevis.innerText = "Modifier"
-                    $buttonDevisDiv.append($buttonModifyDevis)
-                }
+                let $buttonModifyDevis = document.createElement('button')
+                $buttonModifyDevis.setAttribute('id', ('button-mofify-devis-' + $devis[i].id_devis))
+                $buttonModifyDevis.setAttribute('class', 'button-modify-devis btn btn-primary m-1')
+                $buttonModifyDevis.setAttribute('type', 'button')
+                $buttonModifyDevis.innerText = "Modifier"
+                $buttonDevisDiv.append($buttonModifyDevis)
+
                 if ($devis[i].plan === null && ($devis[i].etat === "En attente" || $devis[i].etat === "Accepté")) {
                     let $buttonAddPlanDevis = document.createElement('button')
                     $buttonAddPlanDevis.setAttribute('id', ('button-add-plan-devis-' + $devis[i].id_devis))
