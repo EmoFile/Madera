@@ -44,6 +44,7 @@ class AccountManager(BaseUserManager):
 # Classe mère Compte dont dépends tous les autres comptes
 class Compte(AbstractBaseUser, PermissionsMixin) :
     email = models.EmailField(unique=True)
+    departement = models.CharField(max_length=50)
     id_user = models.AutoField(primary_key=True)
     id_erp = models.IntegerField(unique=True, null=True)
     is_active = models.BooleanField(default=True)

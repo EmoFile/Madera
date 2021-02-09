@@ -42,32 +42,36 @@ class ManualAPICreateUserInterne(generic.View):
         # Création de l'utilisateur correspondant au département
         if department == "IT":
             UserIT.objects.create(email=data_response['internal_user']['e_mail'],
-                                         password=data['password'],
-                                         prenom=data_response['firstname'],
-                                         nom=data_response['lastname'],
-                                         id_erp=int(data["id"])
-                                         )
+                                  password=data['password'],
+                                  prenom=data_response['internal_user']['firstname'],
+                                  nom=data_response['internal_user']['lastname'],
+                                  id_erp=int(data["id"]),
+                                  departement=department
+                                  )
         elif department == "Administrator":
             UserAdministration.objects.create(email=data_response['internal_user']['e_mail'],
-                                                     password=data['password'],
-                                                     prenom=data_response['internal_user']['firstname'],
-                                                     nom=data_response['internal_user']['lastname'],
-                                                     id_erp=int(data["id"])
-                                                     )
+                                              password=data['password'],
+                                              prenom=data_response['internal_user']['firstname'],
+                                              nom=data_response['internal_user']['lastname'],
+                                              id_erp=int(data["id"]),
+                                                departement=department
+                                              )
         elif department == "BE":
             UserBE.objects.create(email=data_response['internal_user']['e_mail'],
-                                         password=data['password'],
-                                         prenom=data_response['internal_user']['firstname'],
-                                         nom=data_response['internal_user']['lastname'],
-                                         id_erp=int(data["id"])
-                                         )
+                                  password=data['password'],
+                                  prenom=data_response['internal_user']['firstname'],
+                                  nom=data_response['internal_user']['lastname'],
+                                  id_erp=int(data["id"]),
+                                  departement=department
+                                  )
         elif department == "Commercial":
             Commercial.objects.create(email=data_response['internal_user']['e_mail'],
-                                             password=data['password'],
-                                             prenom=data_response['internal_user']['firstname'],
-                                             nom=data_response['internal_user']['lastname'],
-                                             id_erp=int(data["id"])
-                                             )
+                                      password=data['password'],
+                                      prenom=data_response['internal_user']['firstname'],
+                                      nom=data_response['internal_user']['lastname'],
+                                      id_erp=int(data["id"]),
+                                  departement=department
+                                      )
         return HttpResponse(status=201)
 
 
@@ -96,7 +100,7 @@ class ManualAPICreateUser(generic.View):
             if data_response['status'] == 200:
                 email = data['email']
                 password = data['password']
-                Client.objects.create(email=email, password=password)
+                Client.objects.create(email=email, password=password, departement="Client")
                 return HttpResponse(status=201)
         else:
             # Création compte dans l'ERP par appel JSON
@@ -111,7 +115,7 @@ class ManualAPICreateUser(generic.View):
             email = data['email']
             password = data['password']
             id_erp = response_json['id']
-            Client.objects.create(email=email, password=password, id_erp=id_erp)
+            Client.objects.create(email=email, password=password, id_erp=id_erp, departement="Client")
             return HttpResponse(status=201)
         return HttpResponse(status=400)
 
