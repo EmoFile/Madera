@@ -51,6 +51,93 @@ const DELETEPIECE = {
     }
 };
 
+const ACCEPTERDEVIS = {
+    bind() {
+        $(".button-accept-devis").attr('class', 'button-accept-devis btn btn-success m-1').click(function () {
+            console.log($(this))
+
+            let elem = document.getElementById($(this).attr('id'))
+            console.log(elem)
+
+            let lio = elem.id.lastIndexOf('-');
+            let idDevis = elem.id.slice(lio + 1);
+            console.log(idDevis)
+
+            //NE PAS OUBLIER DE CHANGER LA SPAN
+
+            //JSON.stringify({'id': idDevis})
+            $.ajax({
+                url: 'http://127.0.0.1:8000/accept-devis/',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify({'id': idDevis}),
+            }).done(function (msg, status, jqXHR) {
+                /*    console.log(msg)
+                    console.log(status)
+                    console.log(jqXHR)*/
+                $products = msg
+                let $span = document.getElementById('status-devis-' + idDevis)
+                $span.setAttribute('class', 'ml-2 badge badge-success')
+                $span.innerText = 'Accepté'
+
+                let idBtnAccept = '#button-accept-devis-' + idDevis
+                let idBtnCancel = '#button-cancel-devis-' + idDevis
+                $(idBtnAccept).hide()
+                $(idBtnCancel).hide()
+
+            })
+        });
+    }
+};
+
+const REFUSERDEVIS = {
+    bind() {
+        $(".button-cancel-devis").attr('class', 'button-cancel-devis btn btn-danger m-1').click(function () {
+            console.log($(this))
+
+            let elem = document.getElementById($(this).attr('id'))
+            console.log(elem)
+
+            let lio = elem.id.lastIndexOf('-');
+            let idDevis = elem.id.slice(lio + 1);
+            console.log(idDevis)
+
+            $.ajax({
+                url: 'http://127.0.0.1:8000/cancel-devis/',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify({'id': idDevis}),
+            }).done(function (msg, status, jqXHR) {
+                /*    console.log(msg)
+                    console.log(status)
+                    console.log(jqXHR)*/
+                $products = msg
+                let $span = document.getElementById('status-devis-' + idDevis)
+                $span.setAttribute('class', 'ml-2 badge badge-danger')
+                $span.innerText = 'Refusé'
+
+                let idBtnAccept = '#button-accept-devis-' + idDevis
+                let idBtnCancel = '#button-cancel-devis-' + idDevis
+                let idBtnAddPlan = '#button-add-plan-devis-' + idDevis
+                $(idBtnAccept).hide()
+                $(idBtnCancel).hide()
+                $(idBtnAddPlan).hide()
+
+                // rajout du bouton modifier
+
+                let $buttonModifyDevis = document.createElement('button')
+                $buttonModifyDevis.setAttribute('id', ('button-mofify-devis-' + idDevis))
+                $buttonModifyDevis.setAttribute('class', 'button-modify-devis btn btn-primary m-1')
+                $buttonModifyDevis.setAttribute('type', 'button')
+                $buttonModifyDevis.innerText = "Modifier"
+                let $buttonDevisDiv = document.getElementById('button-div-devis-' + idDevis)
+                $buttonDevisDiv.append($buttonModifyDevis)
+
+            })
+        });
+    }
+};
+
 $(() => {
     //region CONSTRUCTION-NAVBAR
     let $navDiv = document.getElementById('navigation')
@@ -91,25 +178,125 @@ $(() => {
         `m-1`)
     $buttonHome.innerText = 'Home'
 
-    let $buttonRendezVous = document.createElement('button')
-    $buttonRendezVous.setAttribute('id',
-        `rendez-vous`)
-    $buttonRendezVous.setAttribute('class',
-        `m-1`)
-    $buttonRendezVous.innerText = 'Demander un rendez-vous'
-
     $navDiv.append($buttonHome)
     $navDiv.append($buttonCreationDevis)
     $navDiv.append($buttonCreationCompte)
     $navDiv.append($buttonCreationCompteInterne)
     $navDiv.append($buttonVueBI)
-    $navDiv.append($buttonRendezVous)
     //endregion
 
     //region HOME
     $('#home').click(function () {
         document.getElementById('main-content').innerHTML = ""
-        let $mainDiv = document.getElementById('main-content')
+        // RECUPERER MAIL DE L'USER CO POUR R2CUPERER LA LISTE DES DEVIS OU IL EST IMPLIQUER
+        // SI USER BE RECUPERER TOUT DEVIS
+
+        user = {
+            "mail": "test@test.fr"
+        }
+
+        $.ajax({
+            url: 'http://127.0.0.1:8000/get-devis/',
+            type: 'get',
+            contentType: 'application/json',
+            data: user
+        }).done(function (data, status, jqXHR) {
+            /*    console.log(msg)
+                console.log(status)
+                console.log(jqXHR)*/
+            $devis = data.devis
+            console.log($devis)
+            let $mainDiv = document.getElementById('main-content')
+            for (let i = 0; i < $devis.length; i++) {
+                console.log($devis[i].id_devis)
+                let $devisDiv = document.createElement('div')
+                $devisDiv.setAttribute('id', ('devis-' + $devis[i].id_devis))
+                $devisDiv.setAttribute('class', 'container-fluid border rounded border-dark bg-dark m-4')
+                let $devisTopDiv = document.createElement('div')
+                $devisTopDiv.setAttribute('id', ('top-devis-' + $devis[i].id_devis))
+                $devisTopDiv.setAttribute('class', 'row rounded bg-dark text-white')
+                let $devisMidDiv = document.createElement('div')
+                $devisMidDiv.setAttribute('id', ('mid-devis-' + $devis[i].id_devis))
+                $devisMidDiv.setAttribute('class', 'row rounded bg-light')
+
+                let $titleDevis = document.createElement('h1')
+                $titleDevis.setAttribute('id', ('title-devis-' + $devis[i].id_devis))
+                $titleDevis.setAttribute('class', 'h4 m-2')
+                $titleDevis.innerText = $devis[i].nom_devis
+
+                let $statusDevis = document.createElement('span')
+                $statusDevis.setAttribute('id', ('status-devis-' + $devis[i].id_devis))
+                switch ($devis[i].etat) {
+                    case 'En attente':
+                        $statusDevis.setAttribute('class', 'ml-2 badge badge-warning')
+                        break
+                    case 'Accepté':
+                        $statusDevis.setAttribute('class', 'ml-2 badge badge-success')
+                        break
+                    case 'Refusé':
+                        $statusDevis.setAttribute('class', 'ml-2 badge badge-danger')
+                        break
+                }
+                $statusDevis.innerText = $devis[i].etat
+
+                let $priceDiv = document.createElement('div')
+                $priceDiv.setAttribute('id', ('price-div-devis-' + $devis[i].id_devis))
+                $priceDiv.setAttribute('class', 'col')
+
+                let $price = document.createElement('p')
+                $price.setAttribute('id', ('price-devis-' + $devis[i].id_devis))
+                $price.innerText = $devis[i].prix + '€'
+
+                let $buttonDevisDiv = document.createElement('div')
+                $buttonDevisDiv.setAttribute('id', ('button-div-devis-' + $devis[i].id_devis))
+                $buttonDevisDiv.setAttribute('class', 'col')
+
+
+                if ($devis[i].etat === 'En attente') {
+                    let $buttonAcceptDevis = document.createElement('button')
+                    $buttonAcceptDevis.setAttribute('id', ('button-accept-devis-' + $devis[i].id_devis))
+                    $buttonAcceptDevis.setAttribute('class', 'button-accept-devis btn btn-success m-1')
+                    $buttonAcceptDevis.setAttribute('type', 'button')
+                    $buttonAcceptDevis.innerText = "Accepter"
+
+                    let $buttonCancelDevis = document.createElement('button')
+                    $buttonCancelDevis.setAttribute('id', ('button-cancel-devis-' + $devis[i].id_devis))
+                    $buttonCancelDevis.setAttribute('class', 'button-cancel-devis btn btn-danger m-1')
+                    $buttonCancelDevis.setAttribute('type', 'button')
+                    $buttonCancelDevis.innerText = "Refuser"
+                    $buttonDevisDiv.append($buttonAcceptDevis)
+                    $buttonDevisDiv.append($buttonCancelDevis)
+                }
+                if ($devis[i].etat === 'Refusé') {
+
+                    let $buttonModifyDevis = document.createElement('button')
+                    $buttonModifyDevis.setAttribute('id', ('button-mofify-devis-' + $devis[i].id_devis))
+                    $buttonModifyDevis.setAttribute('class', 'button-modify-devis btn btn-primary m-1')
+                    $buttonModifyDevis.setAttribute('type', 'button')
+                    $buttonModifyDevis.innerText = "Modifier"
+                    $buttonDevisDiv.append($buttonModifyDevis)
+                }
+                if ($devis[i].plan === null && ($devis[i].etat === "En attente" || $devis[i].etat === "Accepté")) {
+                    let $buttonAddPlanDevis = document.createElement('button')
+                    $buttonAddPlanDevis.setAttribute('id', ('button-add-plan-devis-' + $devis[i].id_devis))
+                    $buttonAddPlanDevis.setAttribute('class', 'button-add-plan-devis btn btn-info m-1')
+                    $buttonAddPlanDevis.setAttribute('type', 'button')
+                    $buttonAddPlanDevis.innerText = "Ajouter plan"
+                    $buttonDevisDiv.append($buttonAddPlanDevis)
+                }
+                $priceDiv.append($price)
+                $devisMidDiv.append($priceDiv)
+                $devisMidDiv.append($buttonDevisDiv)
+                $titleDevis.append($statusDevis)
+                $devisTopDiv.append($titleDevis)
+                $devisDiv.append($devisTopDiv)
+                $devisDiv.append($devisMidDiv)
+                $mainDiv.append($devisDiv)
+
+            }
+            ACCEPTERDEVIS.bind()
+            REFUSERDEVIS.bind()
+        })
     });
     //endregion
 
@@ -657,18 +844,4 @@ $(() => {
     });
     //endregion
 
-    //region VUE-BI
-    $('#rendez-vous').click(function () {
-        document.getElementById('main-content').innerHTML = ""
-        let $mainDiv = document.getElementById('main-content')
-        let $dateInput = document.createElement('input')
-        $dateInput.setAttribute('type', 'date')
-        $today = new Date(Date.now())
-        console.log($today)
-        console.log($today.toLocaleDateString())
-        console.log($today.toLocaleString())
-        console.log($today.getFullYear() + '-' + $today.getMonth() + '-' + $today.getDay())
-        $mainDiv.append($dateInput)
-    });
-    //endregion
 });

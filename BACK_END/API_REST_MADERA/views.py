@@ -9,11 +9,11 @@ from django.views.generic import ListView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet
 
-
 from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant, Commercial, \
     UserAdministration, UserIT, UserBE, Client, PieceModule
 from .serializers import DevisSerializer, PlanSerializer, TicketSerializer, GammeSerializer, ComposantSerializer, \
     ModuleSerializer, PieceSerializer, ModuleComposantSerializer
+
 
 # UTILISATEURS
 class ManualAPICreateUserInterne(generic.View):
@@ -41,16 +41,19 @@ class ManualAPICreateUserInterne(generic.View):
         if department == "IT":
             UserIT.objects.create_user(email=data_response['internal_user']['e_mail'], password=data['password'])
         elif department == "Administrator":
-            user = UserAdministration.objects.create(email=data_response['internal_user']['e_mail'], password=data['password'])
+            user = UserAdministration.objects.create(email=data_response['internal_user']['e_mail'],
+                                                     password=data['password'])
             user.save()
         elif department == "BE":
             user = UserBE.objects.create_user(email=data_response['internal_user']['e_mail'], password=data['password'])
             user.save()
         elif department == "Commercial":
-            user = Commercial.objects.create_user(email=data_response['internal_user']['e_mail'], password=data['password'])
+            user = Commercial.objects.create_user(email=data_response['internal_user']['e_mail'],
+                                                  password=data['password'])
             user.save()
 
         return HttpResponse(status=201)
+
 
 # ADMINISTRATIF
 # TICKETS
@@ -296,5 +299,67 @@ class DevisListView(ListView):
                 json_devis.append(json_devi)
             json_response = {"devis": json_devis}
             return JsonResponse(json_response, safe=False)
+        except Exception:
+            raise Exception
+
+
+class ManualAPIAccepterDevis(generic.View):
+    """
+    Only post can be called in this view
+    """
+    http_method_names = ['post']
+
+    @method_decorator(never_cache)
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """
+        Only Request with id in his JSON will work. If the ID is not existing in the base tha t will do 404 or 403
+        In the production the security will check the IP (like the logg tell)
+        :param request: Mandatory: the request with the POST where the ID is mandatory. if id is not existing error 404
+        :return HttpResponse:
+        """
+        try:
+            received = json.loads(request.body)
+            id = received["id"]
+            devis = Devis.objects.get(id_devis=id)
+            print(devis.etat)
+            devis.etat = 'Accepté'
+            devis.save()
+            print(devis.etat)
+            return HttpResponse(200)
+        except Exception:
+            raise Exception
+
+
+class ManualAPIRefuserDevis(generic.View):
+    """
+    Only post can be called in this view
+    """
+    http_method_names = ['post']
+
+    @method_decorator(never_cache)
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """
+        Only Request with id in his JSON will work. If the ID is not existing in the base tha t will do 404 or 403
+        In the production the security will check the IP (like the logg tell)
+        :param request: Mandatory: the request with the POST where the ID is mandatory. if id is not existing error 404
+        :return HttpResponse:
+        """
+        try:
+            received = json.loads(request.body)
+            id = received["id"]
+            devis = Devis.objects.get(id_devis=id)
+            print(devis.etat)
+            devis.etat = 'Refusé'
+            devis.save()
+            print(devis.etat)
+            return HttpResponse(200)
         except Exception:
             raise Exception
