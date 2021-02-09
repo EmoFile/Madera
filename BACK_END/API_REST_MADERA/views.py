@@ -49,22 +49,22 @@ class ManualAPICreateUserInterne(generic.View):
         elif department == "Administrator":
             user = UserAdministration.objects.create(email=data_response['internal_user']['e_mail'],
                                                      password=data['password'],
-                                                     prenom=data_response['firstname'],
-                                                     nom=data_response['lastname']
+                                                     prenom=data_response['internal_user']['firstname'],
+                                                     nom=data_response['internal_user']['lastname']
                                                      )
             user.save()
         elif department == "BE":
             user = UserBE.objects.create(email=data_response['internal_user']['e_mail'],
                                          password=data['password'],
-                                         prenom=data_response['firstname'],
-                                         nom=data_response['lastname']
+                                         prenom=data_response['internal_user']['firstname'],
+                                         nom=data_response['internal_user']['lastname']
                                          )
             user.save()
         elif department == "Commercial":
             user = Commercial.objects.create(email=data_response['internal_user']['e_mail'],
                                              password=data['password'],
-                                             prenom=data_response['firstname'],
-                                             nom=data_response['lastname']
+                                             prenom=data_response['internal_user']['firstname'],
+                                             nom=data_response['internal_user']['lastname']
                                              )
             user.save()
 
