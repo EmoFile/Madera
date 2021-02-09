@@ -5,7 +5,8 @@ from rest_framework import routers
 from API_REST_MADERA import views
 from API_REST_MADERA.views import DevisDetailViewSet, PlanDetailViewSet, TicketDetailViewSet, GammeDetailViewSet, \
     ComposantDetailViewSet, ModuleDetailViewSet, PieceDetailViewSet, ModuleComposantDetailViewSet, products, \
-    ManualAPIDevis, DevisListView, ManualAPICreateUserInterne, ManualAPIAccepterDevis, ManualAPIRefuserDevis
+    ManualAPIDevis, DevisListView, ManualAPICreateUserInterne, ManualAPIAccepterDevis, ManualAPIRefuserDevis, \
+    ManualAPICreateUser
 
 router = routers.DefaultRouter()
 
@@ -24,6 +25,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest-framework')),
     path('create-internal-user/', ManualAPICreateUserInterne.as_view(), name="create-user-internal-api"),
+    path('create-user/', ManualAPICreateUser.as_view(), name="create-user-api"),
     path('products/', products, name='products')
 ]
 urlpatterns += [

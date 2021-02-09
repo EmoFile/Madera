@@ -44,14 +44,15 @@ class CreateClient(generic.View):
                     and isinstance(received['address'], str) and isinstance(received['firstname'], str) \
                     and isinstance(received['lastname'], str):
                 print('GOOD POST')
-                Client.objects.create(
+                client = Client.objects.create(
                     lastname=received['lastname'],
                     firstname=received['firstname'],
                     e_mail=received['e_mail'],
                     address=received['address'],
                     phone_number=received['phone_number'],
                 )
-                return HttpResponse(status=200)
+                return JsonResponse({"status": 201,
+                                     "id": client.id})
             print('BAD POST')
         except ValueError:
             e = sys.exc_info()[0]
@@ -82,8 +83,11 @@ class IsClientExist(generic.View):
             print(f'no e_mail in JSON | IP : {request.META.get("REMOTE_ADDR")}')
             return HttpResponse(status=404)
         try:
-            if isinstance(received['e_mail'], int) and get_object_or_404(Client, e_mail=received['e_mail']):
-                return HttpResponse(status=200)
+            if isinstance(received['e_mail'], str):
+                e_mail = received['e_mail']
+                client = Client.objects.get(e_mail=e_mail)
+                return JsonResponse({'status':200,
+                                     'id': client.id})
             else:
                 return HttpResponse(status=404)
         except ValueError:
