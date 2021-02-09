@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\build\\intermediates\\res\\merged\\release\\layout_row_produit.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\src\\main\\res\\layout\\row_produit.xml"
+    },
+    {
+        "merged": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\build\\intermediates\\res\\merged\\release\\layout_activity_main.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\src\\main\\res\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\build\\intermediates\\res\\merged\\release\\layout_row_layout.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\src\\main\\res\\layout\\row_layout.xml"
+    },
+    {
+        "merged": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\build\\intermediates\\res\\merged\\release\\layout_row_room.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\src\\main\\res\\layout\\row_room.xml"
+    },
+    {
+        "merged": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\build\\intermediates\\res\\merged\\release\\layout_activity_creation_devis.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\src\\main\\res\\layout\\activity_creation_devis.xml"
+    },
+    {
+        "merged": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\build\\intermediates\\res\\merged\\release\\layout_row_range.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\src\\main\\res\\layout\\row_range.xml"
+    }
+]

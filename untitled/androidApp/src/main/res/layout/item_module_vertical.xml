@@ -16,5 +16,5 @@
             android:layout_height="61dp"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/editTextNumber" android:layout_weight="1"/>
+            android:id="@+id/editTextNumber" android:layout_weight="1" android:hint="0"/>
 </LinearLayout>

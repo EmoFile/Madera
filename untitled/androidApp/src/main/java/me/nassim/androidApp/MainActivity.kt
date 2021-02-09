@@ -1,16 +1,15 @@
 package me.nassim.androidApp
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ListView
+import android.widget.EditText
 import me.nassim.shared.Greeting
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONArray
+import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -19,13 +18,16 @@ fun greet(): String {
 }
 
 class MainActivity : AppCompatActivity() {
+    val list_room = ArrayList<Room>()
+    val list = ArrayList<Range>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val url = "https://mysafeinfo.com/api/data?list=presidents&format=json"
+        val url2 = "http://10.0.2.2:8000/products/"
 
-        AsyncTaskHandleJson().execute(url)
+        AsyncTaskHandleJson().execute(url2)
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -50,29 +52,39 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleJson(jsonString: String?) {
 
-        val jsonArray = JSONArray(jsonString)
+        val jsonObj = JSONObject(jsonString)
+        val jsonArray = jsonObj.getJSONArray("products")
 
-        val list = ArrayList<President>()
+
 
         for(i in 0 until jsonArray.length() ){
             val jsonObject = jsonArray.getJSONObject(i)
 
             list.add(
-                President(
-                jsonObject.getInt("ID"),
-                jsonObject.getString("FullName"),
-                jsonObject.getString("Party"),
-                jsonObject.getString("Terms")
+                Range(
+                    jsonObject.getString("nom"),
+                    jsonObject.getJSONArray("modules")
+                )
             )
-            )
+            println(list.last().module[0] is JSONArray)
         }
-        println(list)
-        val moduleRecyclerView = this.findViewById<RecyclerView>(R.id.module_recyclerview)
-        val adapter = ModuleAdapter(this,list)
-        moduleRecyclerView.adapter = adapter
+
+        /*val rangeRecyclerView = this.findViewById<RecyclerView>(R.id.module_recyclerview)
+        val adapter = RangeAdapter(this,list)
+        rangeRecyclerView.adapter = adapter*/
     }
 
-    fun changeToCreation(view: View) {
-        val intent = Intent(this, CreationDevis::class.java)
+    fun addRoom(view: View) {
+        val roomName = this.findViewById<EditText>(R.id.et_room_name)
+        list_room.add(
+            Room(
+                list_room.count()+1,
+                roomName.text.toString(),
+                null
+            )
+        )
+        val roomRecyclerView = this.findViewById<RecyclerView>(R.id.room_recycler_view)
+        val adapter = RoomAdapt(this,list_room,list)
+        roomRecyclerView.adapter = adapter
     }
 }

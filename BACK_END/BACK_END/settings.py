@@ -12,7 +12,7 @@ SECRET_KEY = '$pr4z=^*t0a@%l=yi0146zsbn486clfj_d$49^6*-oa494-1!a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.0.2.2']
 
 AUTH_USER_MODEL = 'API_REST_MADERA.CompteClient'
 

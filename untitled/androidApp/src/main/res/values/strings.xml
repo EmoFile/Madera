@@ -4,6 +4,5 @@
     <string name="ajouter_une_pi_ce">Ajouter une pièce</string>
     <string name="_0">0</string>
     <string name="textview">TextView</string>
-    <string name="textview">TextView</string>
-    <string name="textview">TextView</string>
+    <string name="ajout_piece">Ajout Piece</string>
 </resources>

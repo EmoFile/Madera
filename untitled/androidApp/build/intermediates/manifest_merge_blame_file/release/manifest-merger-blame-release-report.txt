@@ -1,0 +1,48 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="me.nassim.androidApp"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+8-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="29" />
+9-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:5:5-66
+11-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:5:22-64
+12
+13    <application
+13-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:7:5-20:19
+14        android:allowBackup="false"
+14-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:8:13-40
+15        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+15-->[androidx.core:core:1.3.1] C:\Users\Nassim\.gradle\caches\transforms-2\files-2.1\d24106cb9de0794b48b9f031ee083d40\core-1.3.1\AndroidManifest.xml:24:18-86
+16        android:extractNativeLibs="false"
+17        android:supportsRtl="true"
+17-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:9:13-39
+18        android:theme="@style/AppTheme" >
+18-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:10:13-44
+19        <activity android:name="me.nassim.androidApp.CreationDevis" >
+19-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:11:9-12:20
+19-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:11:19-48
+20        </activity>
+21        <activity android:name="me.nassim.androidApp.MainActivity" >
+21-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:13:9-19:20
+21-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:13:19-47
+22            <intent-filter>
+22-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:14:13-18:29
+23                <action android:name="android.intent.action.MAIN" />
+23-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:15:17-68
+23-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:15:25-66
+24
+25                <category android:name="android.intent.category.LAUNCHER" />
+25-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:17:17-76
+25-->D:\CESIproject\MADERA\untitled\androidApp\src\main\AndroidManifest.xml:17:27-74
+26            </intent-filter>
+27        </activity>
+28    </application>
+29
+30</manifest>

@@ -12,6 +12,14 @@
         "source": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\src\\main\\res\\layout\\item_module_vertical.xml"
     },
     {
+        "merged": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\build\\intermediates\\res\\merged\\debug\\layout_item_range_vertical.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\src\\main\\res\\layout\\item_range_vertical.xml"
+    },
+    {
+        "merged": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\build\\intermediates\\res\\merged\\debug\\layout_item_room.xml.flat",
+        "source": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\src\\main\\res\\layout\\item_room.xml"
+    },
+    {
         "merged": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\build\\intermediates\\res\\merged\\debug\\layout_activity_creation_devis.xml.flat",
         "source": "D:\\CESIproject\\MADERA\\untitled\\androidApp\\src\\main\\res\\layout\\activity_creation_devis.xml"
     },

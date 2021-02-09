@@ -1724,6 +1724,10 @@ id edit_query
 id end
 id enterAlways
 id enterAlwaysCollapsed
+id et_devis
+id et_id_client
+id et_id_commercial
+id et_room_name
 id exitUntilCollapsed
 id expand_activities_button
 id expanded_menu
@@ -1775,9 +1779,9 @@ id masked
 id message
 id middle
 id mini
+id module_item_view
 id module_name
 id module_price
-id module_recyclerview
 id month_grid
 id month_navigation_bar
 id month_navigation_fragment_toggle
@@ -1837,6 +1841,7 @@ id president_id
 id president_name
 id president_politic
 id president_time
+id price
 id product_name
 id product_number
 id product_total_price
@@ -1844,6 +1849,7 @@ id progress_circular
 id progress_horizontal
 id radio
 id range_list
+id range_list_view
 id range_name
 id ratio
 id rectangles
@@ -1851,6 +1857,7 @@ id reverseSawtooth
 id right
 id right_icon
 id right_side
+id room_recycler_view
 id rounded
 id row_index_key
 id save_non_transition_alpha
@@ -1925,6 +1932,8 @@ id textEnd
 id textSpacerNoButtons
 id textSpacerNoTitle
 id textStart
+id textView
+id textView3
 id text_input_end_icon
 id text_input_start_icon
 id textinput_counter
@@ -2040,6 +2049,8 @@ layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
 layout item_module_vertical
+layout item_range_vertical
+layout item_room
 layout mtrl_alert_dialog
 layout mtrl_alert_dialog_actions
 layout mtrl_alert_dialog_title
@@ -2125,6 +2136,7 @@ string abc_searchview_description_voice
 string abc_shareactionprovider_share_with
 string abc_shareactionprovider_share_with_application
 string abc_toolbar_collapse_description
+string ajout_piece
 string ajouter_une_pi_ce
 string appbar_scrolling_view_behavior
 string bottom_sheet_behavior
