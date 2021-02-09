@@ -16,6 +16,8 @@ from .serializers import DevisSerializer, PlanSerializer, TicketSerializer, Gamm
     ModuleSerializer, PieceSerializer, ModuleComposantSerializer
 
 # UTILISATEURS
+
+# Création d'utilisateurs internes
 class ManualAPICreateUserInterne(generic.View):
     """
     Only post can be called in this view
@@ -28,29 +30,89 @@ class ManualAPICreateUserInterne(generic.View):
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        # Récupérer les infos du front et créer l'utilisateur correspondant au departement
+        # Récupérer les infos du front
         data = json.loads(request.body)
         user_interne = {"id": int(data["id"])}
         response = requests.post("http://localhost:8001/GetInternalUserById/", json=user_interne)
         data_response = json.loads(response.content)
         if data_response['status'] != 200:
             return HttpResponse(status=400)
-
         department = data_response['internal_user']['department']
 
+        # Création de l'utilisateur correspondant au département
         if department == "IT":
-            UserIT.objects.create_user(email=data_response['internal_user']['e_mail'], password=data['password'])
+            user = UserIT.objects.create(email=data_response['internal_user']['e_mail'],
+                                  password=data['password'],
+                                  prenom=data_response['firstname'],
+                                  nom=data_response['lastname'])
+            user.save()
         elif department == "Administrator":
-            user = UserAdministration.objects.create(email=data_response['internal_user']['e_mail'], password=data['password'])
+            user = UserAdministration.objects.create(email=data_response['internal_user']['e_mail'],
+                                                     password=data['password'],
+                                                     prenom=data_response['firstname'],
+                                                     nom=data_response['lastname']
+                                                     )
             user.save()
         elif department == "BE":
-            user = UserBE.objects.create_user(email=data_response['internal_user']['e_mail'], password=data['password'])
+            user = UserBE.objects.create(email=data_response['internal_user']['e_mail'],
+                                         password=data['password'],
+                                         prenom=data_response['firstname'],
+                                         nom=data_response['lastname']
+                                         )
             user.save()
         elif department == "Commercial":
-            user = Commercial.objects.create_user(email=data_response['internal_user']['e_mail'], password=data['password'])
+            user = Commercial.objects.create(email=data_response['internal_user']['e_mail'],
+                                             password=data['password'],
+                                             prenom=data_response['firstname'],
+                                             nom=data_response['lastname']
+                                             )
             user.save()
 
         return HttpResponse(status=201)
+
+# Création d'utilisateurs clients
+class ManualAPICreateUser(generic.View):
+    """
+    Only post can be called in this view
+    """
+    http_method_names = ['post']
+
+    @method_decorator(never_cache)
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        # Récupérer les infos du front et créer l'utilisateur dans le back si il existe déjà dans l'ERP sinon le créer également dans l'ERP
+        data = json.loads(request.body)
+        email = {"e_mail": data["email"]}
+        # Si la case à cocher "Le client existe déjà" est cochée
+        if data["isClientExist"] == True:
+            response = requests.post("http://localhost:8001/IsClientExist/", json=email)
+            print(response)
+            data_response = json.loads(response.content)
+            # Si le cient existe dans la base ERP
+            if data_response['status'] == 200:
+                email = data['email']
+                password = data['password']
+                Client.objects.create(email=email, password=password)
+                return HttpResponse(status=201)
+        else:
+            # Création compte dans l'ERP par appel JSON
+            user = {"lastname": data["lastname"],
+                    "firstname": data["firstname"],
+                    "address": data["address"],
+                    "e_mail": data["email"],
+                    "phone_number": data["phonenumber"]}
+            response = requests.post("http://localhost:8001/CreateClient/", json=user)
+            response_json = json.loads(response.content)
+            # Création compte dans le BACK avec l'id_erp
+            email = data['email']
+            password = data['password']
+            id_erp = response_json['id']
+            Client.objects.create(email=email, password=password, id_erp=id_erp)
+            return HttpResponse(status=201)
+        return HttpResponse(status=400)
 
 # ADMINISTRATIF
 # TICKETS

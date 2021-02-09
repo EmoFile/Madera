@@ -63,7 +63,7 @@ class UserIT(Compte) :
     prenom = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.prenom + " " + self.nom
+        return self.email
 
 
 # Compte pour User Admnistration
@@ -72,7 +72,7 @@ class UserAdministration(Compte) :
     prenom = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.prenom + " " + self.nom
+        return self.email
 
 
 # Compte pour User Bureau d'Etudes
@@ -81,7 +81,7 @@ class UserBE(Compte) :
     prenom = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.prenom + " " + self.nom
+        return self.email
 
 
 # Compte pour Commercial
@@ -90,17 +90,14 @@ class Commercial(Compte) :
     prenom = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.prenom + " " + self.nom
+        return self.email
 
 
 # Compte pour Client
 class Client(Compte) :
-    nom = models.CharField(max_length=50)
-    prenom = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.prenom + " " + self.nom
-
+        return self.email
 
 # Produits
 
