@@ -9,11 +9,11 @@ from django.views.generic import ListView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet
 
-
 from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant, Commercial, \
     UserAdministration, UserIT, UserBE, Client, PieceModule
 from .serializers import DevisSerializer, PlanSerializer, TicketSerializer, GammeSerializer, ComposantSerializer, \
     ModuleSerializer, PieceSerializer, ModuleComposantSerializer
+
 
 # UTILISATEURS
 
@@ -41,34 +41,35 @@ class ManualAPICreateUserInterne(generic.View):
 
         # Création de l'utilisateur correspondant au département
         if department == "IT":
-            user = UserIT.objects.create(email=data_response['internal_user']['e_mail'],
-                                  password=data['password'],
-                                  prenom=data_response['firstname'],
-                                  nom=data_response['lastname'])
-            user.save()
+            UserIT.objects.create(email=data_response['internal_user']['e_mail'],
+                                         password=data['password'],
+                                         prenom=data_response['firstname'],
+                                         nom=data_response['lastname'],
+                                         id_erp=int(data["id"])
+                                         )
         elif department == "Administrator":
-            user = UserAdministration.objects.create(email=data_response['internal_user']['e_mail'],
+            UserAdministration.objects.create(email=data_response['internal_user']['e_mail'],
                                                      password=data['password'],
                                                      prenom=data_response['internal_user']['firstname'],
-                                                     nom=data_response['internal_user']['lastname']
+                                                     nom=data_response['internal_user']['lastname'],
+                                                     id_erp=int(data["id"])
                                                      )
-            user.save()
         elif department == "BE":
-            user = UserBE.objects.create(email=data_response['internal_user']['e_mail'],
+            UserBE.objects.create(email=data_response['internal_user']['e_mail'],
                                          password=data['password'],
                                          prenom=data_response['internal_user']['firstname'],
-                                         nom=data_response['internal_user']['lastname']
+                                         nom=data_response['internal_user']['lastname'],
+                                         id_erp=int(data["id"])
                                          )
-            user.save()
         elif department == "Commercial":
-            user = Commercial.objects.create(email=data_response['internal_user']['e_mail'],
+            Commercial.objects.create(email=data_response['internal_user']['e_mail'],
                                              password=data['password'],
                                              prenom=data_response['internal_user']['firstname'],
-                                             nom=data_response['internal_user']['lastname']
+                                             nom=data_response['internal_user']['lastname'],
+                                             id_erp=int(data["id"])
                                              )
-            user.save()
-
         return HttpResponse(status=201)
+
 
 # Création d'utilisateurs clients
 class ManualAPICreateUser(generic.View):
@@ -113,6 +114,7 @@ class ManualAPICreateUser(generic.View):
             Client.objects.create(email=email, password=password, id_erp=id_erp)
             return HttpResponse(status=201)
         return HttpResponse(status=400)
+
 
 # ADMINISTRATIF
 # TICKETS
