@@ -1,5 +1,9 @@
 import json
+from datetime import date
+
 import requests
+from django.core.files import storage
+from django.core.files.storage import default_storage
 from django.http import JsonResponse, HttpResponse
 from django.utils.decorators import method_decorator
 from django.views import generic
@@ -9,6 +13,7 @@ from django.views.generic import ListView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet
 
+from BACK_END import settings
 from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, ModuleComposant, Commercial, \
     UserAdministration, UserIT, UserBE, Client, PieceModule
 from .serializers import DevisSerializer, PlanSerializer, TicketSerializer, GammeSerializer, ComposantSerializer, \
@@ -363,3 +368,35 @@ class ManualAPIRefuserDevis(generic.View):
             return HttpResponse(200)
         except Exception:
             raise Exception
+
+
+class ManualAPIAddPlan(generic.View):
+    """
+    Only post can be called in this view
+    """
+    http_method_names = ['post']
+
+    @method_decorator(never_cache)
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """
+        Only Request with id in his JSON will work. If the ID is not existing in the base tha t will do 404 or 403
+        In the production the security will check the IP (like the logg tell)
+        :param request: Mandatory: the request with the POST where the ID is mandatory. if id is not existing error 404
+        :return HttpResponse:
+        """
+        print('test')
+
+        '''print(request.body)
+        print(request.FILES[0])'''
+        print(request.FILES['file.pdf'])
+        file = request.FILES['file.pdf']
+
+        today = date.today()
+
+        date_time_string = today.strftime("%Y%m%d")
+        file_name = default_storage.save('./Media/' + date_time_string + '_' + file.name, file)
+        return HttpResponse(200)
