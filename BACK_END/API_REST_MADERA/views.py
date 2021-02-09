@@ -307,7 +307,6 @@ class ManualAPIDevis(generic.View):
             cpt = 0
             devis = None
             for piece in pieces:
-                print(piece["modules"])
                 created_piece = Piece.objects.create(nom=piece["nom"])
                 created_piece.save()
                 for module in piece["modules"]:
@@ -315,7 +314,6 @@ class ManualAPIDevis(generic.View):
                     PieceModule(piece=created_piece, module=current_module).save()
                     created_piece.save()
                 created_piece.save()
-                print(created_piece.modules.all())
                 if cpt == 0:
                     devis = Devis.objects.create(nom_devis=nom, prix=prix, client=client, commercial=commercial)
                     devis.save()
@@ -340,18 +338,17 @@ class DevisListView(ListView):
     @method_decorator(csrf_exempt)
     def get(self, *args, **kwargs):
         devis = self.get_context_data()
+
         json_devis = []
         try:
             for devi in devis:
-                print(f'id_devis: {devi.id_devis}')
-
                 json_devi = {"id_devis": devi.id_devis,
                              "prix": devi.prix,
                              "etat": devi.etat,
                              "nom_devis": devi.nom_devis,
                              "commercial": devi.commercial,
                              "client": devi.client,
-                             "plan": devi.plan,
+                             "plan": devi.plan.id_plan if devi.plan else None,
                              "pieces": []}
                 pieces = devi.pieces.all()
                 for piece in pieces:
@@ -361,10 +358,7 @@ class DevisListView(ListView):
                         "prix": 0
                     }
                     json_devi["pieces"].append(json_piece)
-                    print(f'id_piece: {piece.id_piece}')
-                    print(f'piece.module.count: {piece.modules.count()}')
                     modules = piece.modules.all()
-                    print(modules)
 
                     current_piece_prix = 0
                     for module in modules:
@@ -403,10 +397,8 @@ class ManualAPIAccepterDevis(generic.View):
             received = json.loads(request.body)
             id = received["id"]
             devis = Devis.objects.get(id_devis=id)
-            print(devis.etat)
             devis.etat = 'Accepté'
             devis.save()
-            print(devis.etat)
             Workflow(2)
             return HttpResponse(200)
         except Exception:
@@ -435,13 +427,28 @@ class ManualAPIRefuserDevis(generic.View):
             received = json.loads(request.body)
             id = received["id"]
             devis = Devis.objects.get(id_devis=id)
-            print(devis.etat)
             devis.etat = 'Refusé'
             devis.save()
-            print(devis.etat)
             return HttpResponse(200)
         except Exception:
             raise Exception
+
+
+def Workflow(workflow_state):
+    if workflow_state == 1:
+        '''send_mail(
+            'Votre devis à été créé',
+            'Retrouver sur votre espace client le devis créé afin de le valider',
+            'richard.sivera@free.fr',
+            ['richard.sivera@free.fr'],
+            fail_silently=False,
+        )'''
+        print('Dire client que sont devis a été établie')
+    elif workflow_state == 2:
+        print('Dire Service BE que sont devis a été accepté')
+    elif workflow_state == 3:
+        print('Dire Service Production que les plans ont été ajouté au devis')
+        print('Dire Service Achats que les plans ont été ajouté au devis')
 
 
 class ManualAPIAddPlan(generic.View):
@@ -462,33 +469,46 @@ class ManualAPIAddPlan(generic.View):
         :param request: Mandatory: the request with the POST where the ID is mandatory. if id is not existing error 404
         :return HttpResponse:
         """
-        print('test')
 
-        '''print(request.body)
-        print(request.FILES[0])'''
-        print(request.FILES['file.pdf'])
         file = request.FILES['file.pdf']
 
         today = date.today()
 
         date_time_string = today.strftime("%Y%m%d")
-        file_name = default_storage.save('./Media/' + date_time_string + '_' + file.name, file)
+        file_path = './Media/' + date_time_string + '_' + file.name
+        file_name = default_storage.save(file_path, file)
+        plan = Plan.objects.create(nom=file.name, lien_pdf=file_path)
+        id_plan = plan.id_plan
+        json_response = {"status": 200, "id_plan": id_plan}
+        print(json_response)
         Workflow(3)
+        return JsonResponse(json_response)
+
+
+class ManualAPIAddPlanTODevis(generic.View):
+    """
+    Only post can be called in this view
+    """
+    http_method_names = ['post']
+
+    @method_decorator(never_cache)
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        print(data)
+        id_plan = data["id_plan"]
+        id_devis = data["id_devis"]
+
+        print(id_plan)
+        print(id_devis)
+
+        devis = Devis.objects.get(id_devis=id_devis)
+        plan = Plan.objects.get(id_plan=id_plan)
+        devis.plan = plan
+        devis.save()
+
+        print(devis.plan)
         return HttpResponse(200)
-
-
-def Workflow(workflow_state):
-    if workflow_state == 1:
-        '''send_mail(
-            'Votre devis à été créé',
-            'Retrouver sur votre espace client le devis créé afin de le valider',
-            'richard.sivera@free.fr',
-            ['richard.sivera@free.fr'],
-            fail_silently=False,
-        )'''
-        print('Dire client que sont devis a été établie')
-    elif workflow_state == 2:
-        print('Dire Service BE que sont devis a été accepté')
-    elif workflow_state == 3:
-        print('Dire Service Production que les plans ont été ajouté au devis')
-        print('Dire Service Achats que les plans ont été ajouté au devis')

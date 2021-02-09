@@ -6,7 +6,7 @@ from API_REST_MADERA import views
 from API_REST_MADERA.views import DevisDetailViewSet, PlanDetailViewSet, TicketDetailViewSet, GammeDetailViewSet, \
     ComposantDetailViewSet, ModuleDetailViewSet, PieceDetailViewSet, ModuleComposantDetailViewSet, products, \
     ManualAPIDevis, DevisListView, ManualAPICreateUserInterne, ManualAPIAccepterDevis, ManualAPIRefuserDevis, \
-    ManualAPICreateUser, CompteDetailViewSet, ManualAPIAddPlan
+    ManualAPICreateUser, CompteDetailViewSet, ManualAPIAddPlan, ManualAPIAddPlanTODevis
 
 router = routers.DefaultRouter()
 
@@ -46,5 +46,6 @@ urlpatterns += [
     path('get-devis/', DevisListView.as_view(), name="list-devis-manual-api"),
     path('accept-devis/', ManualAPIAccepterDevis.as_view(), name="accept-devis-manual-api"),
     path('cancel-devis/', ManualAPIRefuserDevis.as_view(), name="cancel-devis-manual-api"),
-    path('add-plan/', ManualAPIAddPlan.as_view(), name="add-plan-devis-manual-api"),
+    path('send-plan/', ManualAPIAddPlan.as_view(), name="send-plan-manual-api"),
+    path('add-plan-to-devis/', ManualAPIAddPlanTODevis.as_view(), name="add-plan-to-devis-manual-api"),
 ]

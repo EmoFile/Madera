@@ -151,34 +151,37 @@ const SENDFILE = {
             let btnSendFile = ('button-send-file-devis-' + idDevis)
             let btnSelectFile = ('input-select-file-devis-' + idDevis)
             let file = document.getElementById(btnSelectFile)
-            console.log(file.files[0].name)
-            console.log(file.files[0])
             file.files[0].name = idDevis + '-' + file.files[0].name
-            console.log(file.files[0].name)
             let formData = new FormData();
             formData.append('file.pdf', file.files[0]);
-            console.log(formData)
             var xhr = new XMLHttpRequest();
             xhr.onload = function (e) {
                 if (xhr.readyState === 4 && xhr.status === 200) {
+                    //Après le send on passe ici si 200
+                    //button-div-devis-2
+                    let divToHide = '#button-div-devis-' + idDevis
+                    $(divToHide).hide()
                     result = xhr.responseText;
-                    console.log(result);
+                    result_parsed = JSON.parse(result)
+                    let id_plan = result_parsed.id_plan
+                    data_json = {"id_plan": id_plan, "id_devis": parseInt(idDevis)}
+                    $.ajax({
+                        url: 'http://127.0.0.1:8000/add-plan-to-devis/',
+                        type: 'post',
+                        data: JSON.stringify(data_json),
+                        dataType: 'application/json',
+                    }).done(function (msg, status, jqXHR) {
+                        /*    console.log(msg)
+                            console.log(status)
+                            console.log(jqXHR)*/
+
+                    })
+
                 }
             }
-            xhr.open('POST', "http://127.0.0.1:8000/add-plan/", true);
+            xhr.open('POST', "http://127.0.0.1:8000/send-plan/", true);
             xhr.setRequestHeader("Authorization", "");
             xhr.send(formData);
-            /*            $.ajax({
-                            url: 'http://127.0.0.1:8000/add-plan/',
-                            type: 'post',
-                            data: FormData,
-                            dataType: 'application/pdf',
-                        }).done(function (msg, status, jqXHR) {
-                            /!*    console.log(msg)
-                                console.log(status)
-                                console.log(jqXHR)*!/
-
-                        })*/
         });
     }
 };
@@ -282,7 +285,6 @@ $(() => {
             console.log($devis)
             let $mainDiv = document.getElementById('main-content')
             for (let i = 0; i < $devis.length; i++) {
-                console.log($devis[i].id_devis)
                 let $devisDiv = document.createElement('div')
                 $devisDiv.setAttribute('id', ('devis-' + $devis[i].id_devis))
                 $devisDiv.setAttribute('class', 'container-fluid border rounded border-dark bg-dark m-4')
