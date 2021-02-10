@@ -303,8 +303,8 @@ class ManualAPIDevis(generic.View):
         try:
             received = json.loads(request.body)
             prix = received["prix"]
-            client = received["client"]
-            commercial = received["commercial"]
+            client = Client.objects.get(id_user=int(received["client"]))
+            commercial = Commercial.objects.get(id_erp=int(received["commercial"]))
             nom = received["nom_devis"]
             pieces = received["pieces"]
             cpt = 0
@@ -357,16 +357,28 @@ class GetAllClient(ListView):
             raise Exception
 
 
-class DevisListView(ListView):
+class DevisListView(generic.View):
     model = Devis
-
-    def get_context_data(self, *args, **kwargs):
-        return Devis.objects.all()
 
     @method_decorator(never_cache)
     @method_decorator(csrf_exempt)
-    def get(self, *args, **kwargs):
-        devis = self.get_context_data()
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        user = Token.objects.get(key=kwargs["token"])
+        if ('Client' == user.user.departement):
+            client = Client.objects.get(id_user=user.user.id_user)
+            return Devis.objects.filter(client=client)
+        elif ('Commercial' == user.user.departement):
+            commercial = Commercial.objects.get(id_user=user.user.id_user)
+            return Devis.objects.filter(commercial=commercial)
+        else:
+            return Devis.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        token = json.loads(request.body)
+        devis = self.get_context_data(token=token["token"])
 
         json_devis = []
         try:
@@ -375,8 +387,8 @@ class DevisListView(ListView):
                              "prix": devi.prix,
                              "etat": devi.etat,
                              "nom_devis": devi.nom_devis,
-                             "commercial": devi.commercial,
-                             "client": devi.client,
+                             "commercial": devi.commercial.id_user if devi.commercial else None,
+                             "client": devi.client.id_user if devi.client else None,
                              "plan": devi.plan.id_plan if devi.plan else None,
                              "pieces": []}
                 pieces = devi.pieces.all()
