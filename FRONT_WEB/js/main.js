@@ -122,17 +122,6 @@ const REFUSERDEVIS = {
                 $(idBtnAccept).hide()
                 $(idBtnCancel).hide()
                 $(idBtnAddPlan).hide()
-
-                // rajout du bouton modifier
-
-                let $buttonModifyDevis = document.createElement('button')
-                $buttonModifyDevis.setAttribute('id', ('button-mofify-devis-' + idDevis))
-                $buttonModifyDevis.setAttribute('class', 'button-modify-devis btn btn-primary m-1')
-                $buttonModifyDevis.setAttribute('type', 'button')
-                $buttonModifyDevis.innerText = "Modifier"
-                let $buttonDevisDiv = document.getElementById('button-div-devis-' + idDevis)
-                $buttonDevisDiv.append($buttonModifyDevis)
-
             })
         });
     }
@@ -255,11 +244,19 @@ $(() => {
         `m-1`)
     $buttonHome.innerText = 'Home'
 
+    let $buttonLogin = document.createElement('button')
+    $buttonLogin.setAttribute('id',
+        `login`)
+    $buttonLogin.setAttribute('class',
+        `m-1`)
+    $buttonLogin.innerText = 'Connexion'
+
     $navDiv.append($buttonHome)
     $navDiv.append($buttonCreationDevis)
     $navDiv.append($buttonCreationCompte)
     $navDiv.append($buttonCreationCompteInterne)
     $navDiv.append($buttonVueBI)
+    $navDiv.append($buttonLogin)
     //endregion
 
     //region HOME
@@ -343,15 +340,14 @@ $(() => {
                     $buttonDevisDiv.append($buttonAcceptDevis)
                     $buttonDevisDiv.append($buttonCancelDevis)
                 }
-                if ($devis[i].etat === 'Refusé') {
 
-                    let $buttonModifyDevis = document.createElement('button')
-                    $buttonModifyDevis.setAttribute('id', ('button-mofify-devis-' + $devis[i].id_devis))
-                    $buttonModifyDevis.setAttribute('class', 'button-modify-devis btn btn-primary m-1')
-                    $buttonModifyDevis.setAttribute('type', 'button')
-                    $buttonModifyDevis.innerText = "Modifier"
-                    $buttonDevisDiv.append($buttonModifyDevis)
-                }
+                let $buttonModifyDevis = document.createElement('button')
+                $buttonModifyDevis.setAttribute('id', ('button-mofify-devis-' + $devis[i].id_devis))
+                $buttonModifyDevis.setAttribute('class', 'button-modify-devis btn btn-primary m-1')
+                $buttonModifyDevis.setAttribute('type', 'button')
+                $buttonModifyDevis.innerText = "Modifier"
+                $buttonDevisDiv.append($buttonModifyDevis)
+
                 if ($devis[i].plan === null && ($devis[i].etat === "En attente" || $devis[i].etat === "Accepté")) {
                     let $buttonAddPlanDevis = document.createElement('button')
                     $buttonAddPlanDevis.setAttribute('id', ('button-add-plan-devis-' + $devis[i].id_devis))
@@ -930,5 +926,65 @@ $(() => {
         })
     });
     //endregion
+    $('#login').click(function () {
+        document.getElementById('main-content').innerHTML = ""
+        let $mainDiv = document.getElementById('main-content')
 
+        let $eMailArea = document.createElement('input')
+        $eMailArea.setAttribute('id', 'eMailArea')
+        $eMailArea.setAttribute('type', 'mail')
+        $eMailArea.setAttribute('name', 'eMailArea')
+        $eMailArea.setAttribute('maxlength', 50)
+        let $labelEMailArea = document.createElement('label')
+        $labelEMailArea.setAttribute('for', 'eMailArea')
+        $labelEMailArea.innerText = "Adresse mail"
+
+        let $passwordArea = document.createElement('input')
+        $passwordArea.setAttribute('id', 'passwordArea')
+        $passwordArea.setAttribute('type', 'password')
+        $passwordArea.setAttribute('name', 'passwordArea')
+        let $labelPasswordArea = document.createElement('label')
+        $labelPasswordArea.setAttribute('for', 'passwordArea')
+        $labelPasswordArea.innerText = "Password"
+
+        let $ConnexionButton = document.createElement('button')
+        $ConnexionButton.setAttribute('id', 'connexionButton')
+        $ConnexionButton.setAttribute('type', 'button')
+        $ConnexionButton.innerText = "Connexion"
+
+        let $emDiv = document.createElement('div')
+        let $pwDiv = document.createElement('div')
+
+        $emDiv.append($labelEMailArea)
+        $emDiv.append($eMailArea)
+
+        $pwDiv.append($labelPasswordArea)
+        $pwDiv.append($passwordArea)
+
+        $mainDiv.append($emDiv)
+        $mainDiv.append($pwDiv)
+        $mainDiv.append($ConnexionButton)
+
+        $('#connexionButton').click(function () {
+            email = document.getElementById('eMailArea')
+            password = document.getElementById('passwordArea')
+            data_json = {"email": email.value, "password": password.value}
+            console.log(data_json)
+            $.ajax({
+                url: 'http://127.0.0.1:8000/manual-api-auth/login/',
+                type: 'post',
+                data: JSON.stringify(data_json),
+                dataType: 'json',
+            }).done(function (msg, status, jqXHR) {
+                console.log('test')
+                console.log(status)
+                console.log(jqXHR)
+            }).fail(function (msg, status, jqXHR) {
+                console.log('fail')
+                console.log(msg)
+                console.log(status)
+                console.log(jqXHR)
+            })
+        });
+    });
 });

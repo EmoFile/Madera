@@ -6,10 +6,11 @@ from .models import Devis, Plan, Ticket, Gamme, Composant, Module, Piece, Module
 # Serialisation des données en JSON
 
 # Compte
-class CompteSerializer(serializers.ModelSerializer) :
+class CompteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Compte
-        fields = ('departement',)
+        fields = ('departement', 'id_erp')
+
 
 # Administratif
 
