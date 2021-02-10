@@ -757,6 +757,16 @@ $(() => {
                     "phonenumber": phonenumber.value
                 }
             }
+            $.ajax({
+                url: 'http://127.0.0.1:8000/create-user/',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(data_json)
+            }).done(function (msg, status, jqXHR) {
+                console.log(msg)
+                console.log(status)
+                console.log(jqXHR)
+            })
             console.log(data_json)
         });
     });

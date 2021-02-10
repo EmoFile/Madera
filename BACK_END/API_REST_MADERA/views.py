@@ -328,6 +328,32 @@ class ManualAPIDevis(generic.View):
             raise Exception
 
 
+class GetAllClient (ListView):
+    model = Client
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        return Client.objects.all()
+
+    @method_decorator(never_cache)
+    @method_decorator(csrf_exempt)
+    def get(self, request, *args, **kwargs):
+        clients = self.get_context_data()
+        list_client = []
+        try:
+            for client in clients:
+                json_client ={
+                    "id_erp": client.id_erp,
+                    "id_client": client.id_user,
+                    "mail": client.email,
+
+                }
+                list_client.append(json_client)
+            json_response = {"clients": list_client}
+            return JsonResponse(json_response, safe=False)
+        except Exception:
+            raise Exception
+
+
 class DevisListView(ListView):
     model = Devis
 
