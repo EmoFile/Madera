@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
 from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication
+from rest_framework.authtoken.models import Token
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.viewsets import ModelViewSet
 
@@ -330,7 +331,7 @@ class ManualAPIDevis(generic.View):
             raise Exception
 
 
-class GetAllClient (ListView):
+class GetAllClient(ListView):
     model = Client
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -343,7 +344,7 @@ class GetAllClient (ListView):
         list_client = []
         try:
             for client in clients:
-                json_client ={
+                json_client = {
                     "id_erp": client.id_erp,
                     "id_client": client.id_user,
                     "mail": client.email,
@@ -560,8 +561,11 @@ class ManualAPIAuthentication(generic.View):
         if user.password != data["password"]:
             return HttpResponse(status=404)
         else:
+            token = Token.objects.get_or_create(user=user)
+            print(token[0].key)
             user = CompteSerializer(user)
-            print(user.data)
             json_response = {"status": 200,
-                             "user": {"id_erp": user.data["id_erp"], "departement": user.data["departement"]}}
+                             "user": {"id_erp": user.data["id_erp"],
+                                      "departement": user.data["departement"],
+                                      "token": token[0].key}}
             return JsonResponse(json_response)

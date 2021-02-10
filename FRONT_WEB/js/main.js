@@ -1,6 +1,8 @@
 var $products = null
 var $devis = null
+var $clients = null
 
+var session = {}
 $.ajax({
     url: 'http://127.0.0.1:8000/products/',
     type: 'get',
@@ -13,8 +15,18 @@ $.ajax({
     console.log($products)
 
 })
-var $clients = [{"id_erp": 1, "id_client": 1, "mail": "richard.sivera@free.fr"},
-    {"id_erp": 2, "id_client": 2, "mail": "marine.legast@free.fr"},]
+$.ajax({
+    url: 'http://127.0.0.1:8000/get-clients/',
+    type: 'get',
+    contentType: 'application/json',
+}).done(function (msg, status, jqXHR) {
+    /*    console.log(msg)
+        console.log(status)
+        console.log(jqXHR)*/
+    $clients = msg["clients"]
+    console.log($clients)
+
+})
 var $commercial = [{"id_erp": 1, "id_client": 1, "mail": "richard.sivera@free.fr"},
     {"id_erp": 2, "id_client": 2, "mail": "marine.legast@free.fr"},]
 var devisJSON = {
@@ -969,16 +981,17 @@ $(() => {
             email = document.getElementById('eMailArea')
             password = document.getElementById('passwordArea')
             data_json = {"email": email.value, "password": password.value}
-            console.log(data_json)
             $.ajax({
                 url: 'http://127.0.0.1:8000/manual-api-auth/login/',
                 type: 'post',
                 data: JSON.stringify(data_json),
                 dataType: 'json',
             }).done(function (msg, status, jqXHR) {
-                console.log('test')
-                console.log(status)
-                console.log(jqXHR)
+                /*                console.log(msg)
+                                console.log(status)
+                                console.log(jqXHR)*/
+                session = msg.user
+                console.log(session)
             }).fail(function (msg, status, jqXHR) {
                 console.log('fail')
                 console.log(msg)
