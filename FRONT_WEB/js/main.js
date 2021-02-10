@@ -244,11 +244,19 @@ $(() => {
         `m-1`)
     $buttonHome.innerText = 'Home'
 
+    let $buttonLogin = document.createElement('button')
+    $buttonLogin.setAttribute('id',
+        `login`)
+    $buttonLogin.setAttribute('class',
+        `m-1`)
+    $buttonLogin.innerText = 'Connexion'
+
     $navDiv.append($buttonHome)
     $navDiv.append($buttonCreationDevis)
     $navDiv.append($buttonCreationCompte)
     $navDiv.append($buttonCreationCompteInterne)
     $navDiv.append($buttonVueBI)
+    $navDiv.append($buttonLogin)
     //endregion
 
     //region HOME
@@ -908,5 +916,65 @@ $(() => {
         })
     });
     //endregion
+    $('#login').click(function () {
+        document.getElementById('main-content').innerHTML = ""
+        let $mainDiv = document.getElementById('main-content')
 
+        let $eMailArea = document.createElement('input')
+        $eMailArea.setAttribute('id', 'eMailArea')
+        $eMailArea.setAttribute('type', 'mail')
+        $eMailArea.setAttribute('name', 'eMailArea')
+        $eMailArea.setAttribute('maxlength', 50)
+        let $labelEMailArea = document.createElement('label')
+        $labelEMailArea.setAttribute('for', 'eMailArea')
+        $labelEMailArea.innerText = "Adresse mail"
+
+        let $passwordArea = document.createElement('input')
+        $passwordArea.setAttribute('id', 'passwordArea')
+        $passwordArea.setAttribute('type', 'password')
+        $passwordArea.setAttribute('name', 'passwordArea')
+        let $labelPasswordArea = document.createElement('label')
+        $labelPasswordArea.setAttribute('for', 'passwordArea')
+        $labelPasswordArea.innerText = "Password"
+
+        let $ConnexionButton = document.createElement('button')
+        $ConnexionButton.setAttribute('id', 'connexionButton')
+        $ConnexionButton.setAttribute('type', 'button')
+        $ConnexionButton.innerText = "Connexion"
+
+        let $emDiv = document.createElement('div')
+        let $pwDiv = document.createElement('div')
+
+        $emDiv.append($labelEMailArea)
+        $emDiv.append($eMailArea)
+
+        $pwDiv.append($labelPasswordArea)
+        $pwDiv.append($passwordArea)
+
+        $mainDiv.append($emDiv)
+        $mainDiv.append($pwDiv)
+        $mainDiv.append($ConnexionButton)
+
+        $('#connexionButton').click(function () {
+            email = document.getElementById('eMailArea')
+            password = document.getElementById('passwordArea')
+            data_json = {"email": email.value, "password": password.value}
+            console.log(data_json)
+            $.ajax({
+                url: 'http://127.0.0.1:8000/manual-api-auth/login/',
+                type: 'post',
+                data: JSON.stringify(data_json),
+                dataType: 'json',
+            }).done(function (msg, status, jqXHR) {
+                console.log('test')
+                console.log(status)
+                console.log(jqXHR)
+            }).fail(function (msg, status, jqXHR) {
+                console.log('fail')
+                console.log(msg)
+                console.log(status)
+                console.log(jqXHR)
+            })
+        });
+    });
 });

@@ -11,6 +11,8 @@ from django.views import generic
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
+from rest_framework import exceptions
+from rest_framework.authentication import BaseAuthentication
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.viewsets import ModelViewSet
 
@@ -512,3 +514,28 @@ class ManualAPIAddPlanTODevis(generic.View):
 
         print(devis.plan)
         return HttpResponse(200)
+
+
+class ManualAPIAuthentication(generic.View):
+    @method_decorator(never_cache)
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request):
+        data = json.loads(request.body)
+        email = data["email"]
+        if not email:
+            return None
+        try:
+            user = Compte.objects.get(email=email)
+        except Compte.DoesNotExist:
+            raise exceptions.AuthenticationFailed('No such user')
+        if user.password != data["password"]:
+            return HttpResponse(status=404)
+        else:
+            user = CompteSerializer(user)
+            print(user.data)
+            json_response = {"status": 200,
+                             "user": {"id_erp": user.data["id_erp"], "departement": user.data["departement"]}}
+            return JsonResponse(json_response)
